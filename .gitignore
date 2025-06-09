@@ -1,0 +1,43 @@
+tt.*
+.tests
+doc/tags
+debug
+.repro
+foo.*
+*.log
+data
+.DS_Store
+
+# Plugin lock file
+lazy-lock.json
+
+# Neovim swap files
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.orig
+
+# Undo history
+*.un~
+.undo/
+undo/
+
+# Session files
+Session.vim
+*.vim.session
+
+# Neovim shada (shared data)
+.shada
+*.shada
+
+# Local state
+.local/
+state/
+cache/
+
+# Tags files
+tags
+TAGS
