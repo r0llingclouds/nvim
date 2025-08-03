@@ -46,7 +46,7 @@ My personal Neovim setup built on top of [LazyVim](https://www.lazyvim.org/), fe
 1. Backup your existing Neovim config
 2. Clone this repository:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/nvim-config ~/.config/nvim
+   git clone https://github.com/r0llingclouds/nvim ~/.config/nvim
    ```
 3. Start Neovim and let LazyVim install everything
 
