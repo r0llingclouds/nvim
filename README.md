@@ -7,7 +7,8 @@ My personal Neovim setup built on top of [LazyVim](https://www.lazyvim.org/), fe
 - **Base**: LazyVim distribution for a solid foundation
 - **AI Integration**: 
   - GitHub Copilot with custom keymaps (`<C-J>` to accept)
-  - Avante.nvim for Claude AI chat integration
+  - Avante.nvim for AI chat & composer-like integration
+  - Claude Code (not really inside neovim but a nice addition using neovim+cc in tmux)
 - **Multiple Colorschemes**: Tokyo Night (default), Catppuccin, Dracula, Everforest, Kanagawa, Monokai Pro, Rose Pine, Scholar, and Zenbones
 - **Language Support**: Enhanced LSP configurations for C#, Swift, TypeScript, SQL, and more
 - **Productivity**: LSP's, Tmux navigation, custom keymaps
