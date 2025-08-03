@@ -28,7 +28,7 @@ My personal Neovim setup built on top of [LazyVim](https://www.lazyvim.org/), fe
   - Alternative: [OpenCode](https://opencode.ai) with LLMs via [OpenRouter](https://openrouter.ai) API (test models like Kimi K2 or Qwen3)
 
 ## Key Mappings
-
+- All the ones [provided by LazyVim](https://www.lazyvim.org/keymaps), quite a few.
 - `<C-h/j/k/l>` - Navigate between tmux panes and Neovim splits seamlessly (thanks to tmux-navigator)
 - `<C-J>` - Accept Copilot suggestion
 - `<leader>rg` - Replace word under cursor globally
