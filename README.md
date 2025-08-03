@@ -16,7 +16,7 @@ My personal Neovim setup built on top of [LazyVim](https://www.lazyvim.org/), fe
 ## Terminal Setup
 
 - **Terminal**: [Ghostty](https://ghostty.org/) - A fast native terminal emulator
-- **Multiplexer**: tmux with TPM (Tmux Plugin Manager)
+- **Multiplexer**: tmux with TPM (Tmux Plugin Manager). Note this one is not really inside neovim. Head out to [typecraft](https://typecraft.dev) for a great intro to tmux.
   - **Theme**: Catppuccin with custom status bar
   - **Navigation**: vim-tmux-navigator for unified pane switching
   - **Prefix**: `C-s` (Ctrl+s)
