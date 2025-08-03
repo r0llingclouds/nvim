@@ -11,3 +11,5 @@
 -- vim.keymap.set("n", "<C-k>", "<C-u>", { desc = "Scroll up half page" })
 -- vim.keymap.set("v", "<C-j>", "<C-d>", { desc = "Scroll down half page" })
 -- vim.keymap.set("v", "<C-k>", "<C-u>", { desc = "Scroll up half page" })
+
+vim.keymap.set("n", "<leader>rg", ":%s/<C-r><C-w>//g<Left><Left>", { desc = "Replace word under cursor globally" })
