@@ -36,7 +36,7 @@ My personal Neovim setup built on top of [LazyVim](https://www.lazyvim.org/), fe
 
 ## Notable Plugins
 
-- **avante.nvim** - Claude AI integration for code assistance
+- **avante.nvim** - AI ask & edit integration for code assistance
 - **copilot.vim** - GitHub Copilot support
 - **vim-tmux-navigator** - Seamless tmux/vim navigation
 - **molten.nvim** - Interactive code evaluation
