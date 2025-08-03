@@ -1,6 +1,6 @@
 # 💤 LazyVim Configuration
 
-My personal Neovim setup built on top of [LazyVim](https://www.lazyvim.org/), featuring multiple colorschemes, AI assistance, and enhanced development tools.
+My personal Neovim setup built on top of [LazyVim](https://www.lazyvim.org/), featuring some colorschemes, AI assistance, and enhanced development tools.
 
 ## Features
 
@@ -10,11 +10,11 @@ My personal Neovim setup built on top of [LazyVim](https://www.lazyvim.org/), fe
   - Avante.nvim for Claude AI chat integration
 - **Multiple Colorschemes**: Tokyo Night (default), Catppuccin, Dracula, Everforest, Kanagawa, Monokai Pro, Rose Pine, Scholar, and Zenbones
 - **Language Support**: Enhanced LSP configurations for C#, Swift, TypeScript, SQL, and more
-- **Productivity**: Tmux navigation, custom keymaps, and Molten for notebook-style coding
+- **Productivity**: LSP's, Tmux navigation, custom keymaps
 
 ## Terminal Setup
 
-- **Terminal**: [Ghostty](https://ghostty.org/) - A fast, feature-rich terminal emulator
+- **Terminal**: [Ghostty](https://ghostty.org/) - A fast native terminal emulator
 - **Multiplexer**: tmux with TPM (Tmux Plugin Manager)
   - **Theme**: Catppuccin with custom status bar
   - **Navigation**: vim-tmux-navigator for unified pane switching
@@ -29,7 +29,7 @@ My personal Neovim setup built on top of [LazyVim](https://www.lazyvim.org/), fe
 
 ## Key Mappings
 
-- `<C-h/j/k/l>` - Navigate between tmux panes and Neovim splits seamlessly
+- `<C-h/j/k/l>` - Navigate between tmux panes and Neovim splits seamlessly (thanks to tmux-navigator)
 - `<C-J>` - Accept Copilot suggestion
 - `<leader>rg` - Replace word under cursor globally
 
