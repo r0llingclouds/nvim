@@ -17,5 +17,43 @@ return {
       ["<Up>"] = { "fallback" },
       ["<Down>"] = { "fallback" },
     },
+    completion = {
+      ghost_text = {
+        enabled = true,
+      },
+    },
   },
+  config = function(_, opts)
+    -- Wrap blink.cmp setup to handle cmdline conflicts
+    local blink = require("blink.cmp")
+    
+    -- Store original ghost text draw function
+    local ghost_text = require("blink.cmp.completion.windows.ghost_text")
+    local original_draw = ghost_text.draw_preview
+    
+    -- Override draw_preview to check for cmdline mode
+    ghost_text.draw_preview = function(...)
+      -- Skip drawing in cmdline mode or noice buffers
+      if vim.fn.mode() == "c" then
+        return
+      end
+      
+      -- Check if we're in a special buffer that might cause issues
+      local bufnr = vim.api.nvim_get_current_buf()
+      local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
+      if buftype == "nofile" or buftype == "prompt" then
+        return
+      end
+      
+      -- Safe to draw
+      local ok, result = pcall(original_draw, ...)
+      if not ok then
+        -- Silently ignore errors instead of crashing
+        return
+      end
+      return result
+    end
+    
+    blink.setup(opts)
+  end,
 }
