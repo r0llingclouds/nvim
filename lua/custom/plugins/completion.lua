@@ -26,12 +26,9 @@ return {
   --- @type blink.cmp.Config
   opts = {
     keymap = {
-      -- 'default' (recommended) for mappings similar to built-in completions
-      --   <c-y> to accept ([y]es) the completion.
-      -- 'super-tab' for tab to accept
-      -- 'enter' for enter to accept
-      -- See :h blink-cmp-config-keymap for defining your own keymap
-      preset = 'default',
+      preset = 'enter', -- Enter accepts completion
+      ['<C-j>'] = { 'select_next', 'fallback' },
+      ['<C-k>'] = { 'select_prev', 'fallback' },
     },
 
     appearance = {
