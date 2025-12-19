@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 -- LSP Configuration
 -- Language Server Protocol support with Mason for server management
 
