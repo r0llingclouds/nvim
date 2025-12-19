@@ -1,0 +1,39 @@
+   nvim
+ ├╴  doc
+ ├╴  lua
+ │ ├╴  custom
+ │ │ └╴  plugins
+ │ │   ├╴  bufferline.lua
+ │ │   ├╴  init.lua
+ │ │   └╴  snacks.lua
+ │ └╴  kickstart
+ ├╴  LICENSE.md
+ ├╴  README.md
+ └╴  init.lua
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
