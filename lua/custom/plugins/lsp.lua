@@ -27,6 +27,10 @@ return {
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
         end
 
+        -- Snacks picker LSP shortcuts
+        map('gd', function() Snacks.picker.lsp_definitions() end, 'Goto Definition')
+        map('gr', function() Snacks.picker.lsp_references() end, 'References')
+
         -- Rename the variable under your cursor.
         map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
 
@@ -135,12 +139,6 @@ return {
     -- Enable language servers
     -- Add any additional servers here. They will automatically be installed by Mason.
     local servers = {
-      -- clangd = {},
-      -- gopls = {},
-      -- pyright = {},
-      -- rust_analyzer = {},
-      -- ts_ls = {},
-
       lua_ls = {
         settings = {
           Lua = {
@@ -150,12 +148,24 @@ return {
           },
         },
       },
+
+      -- C# (Unity)
+      omnisharp = {},
+
+      -- Python (AI)
+      basedpyright = {},
+
+      -- JavaScript/TypeScript
+      ts_ls = {},
     }
 
     -- Ensure the servers and tools are installed
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
-      'stylua', -- Used to format Lua code
+      'stylua', -- Lua formatter
+      'csharpier', -- C# formatter
+      'ruff', -- Python linter + formatter
+      'prettierd', -- JS/TS/JSON formatter
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
