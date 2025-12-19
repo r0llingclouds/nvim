@@ -122,5 +122,19 @@ return {
       toggle_zen,
       desc = 'Toggle Zen Mode',
     },
+    {
+      '<leader>uc',
+      function()
+        Snacks.picker.colorschemes()
+      end,
+      desc = 'Colorschemes',
+    },
+    {
+      '<leader>ud',
+      function()
+        vim.o.background = vim.o.background == 'dark' and 'light' or 'dark'
+      end,
+      desc = 'Toggle Light/Dark',
+    },
   },
 }
