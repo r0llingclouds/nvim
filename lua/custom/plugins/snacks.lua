@@ -26,4 +26,18 @@ return {
       },
     },
   },
+  config = function(_, opts)
+    require('snacks').setup(opts)
+
+    -- Show dashboard when opening a directory (e.g., nvim .)
+    vim.api.nvim_create_autocmd('VimEnter', {
+      callback = function()
+        local arg = vim.fn.argv(0)
+        if arg ~= '' and vim.fn.isdirectory(arg) == 1 then
+          vim.cmd('bdelete')
+          require('snacks').dashboard()
+        end
+      end,
+    })
+  end,
 }
