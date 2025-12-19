@@ -85,7 +85,10 @@ return {
         },
       },
     },
-    explorer = { enabled = true },
+    explorer = {
+      enabled = true,
+      replace_netrw = false,  -- Don't auto-open when opening directories
+    },
     picker = { enabled = true },
     quickfile = { enabled = true },
     bufdelete = { enabled = true },
