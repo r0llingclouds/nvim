@@ -93,6 +93,7 @@ return {
     quickfile = { enabled = true },
     bufdelete = { enabled = true },
     dim = { enabled = true },
+    scroll = { enabled = true },
   },
   keys = {
     {
