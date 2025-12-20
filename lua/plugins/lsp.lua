@@ -5,24 +5,22 @@
 return {
   'neovim/nvim-lspconfig',
   dependencies = {
-    -- Automatically install LSPs and related tools to stdpath for Neovim
-    -- Mason must be loaded before its dependents so we need to set it up here.
+    -- Mason must be loaded before its dependents
     { 'mason-org/mason.nvim', opts = {} },
     'mason-org/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
 
-    -- Useful status updates for LSP.
+    -- Useful status updates for LSP
     { 'j-hui/fidget.nvim', opts = {} },
 
     -- Allows extra capabilities provided by blink.cmp
     'saghen/blink.cmp',
   },
   config = function()
-    -- This function gets run when an LSP attaches to a particular buffer.
+    -- This function gets run when an LSP attaches to a particular buffer
     vim.api.nvim_create_autocmd('LspAttach', {
-      group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
+      group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
       callback = function(event)
-        -- Helper function for LSP-related keymaps
         local map = function(keys, func, desc, mode)
           mode = mode or 'n'
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
@@ -32,31 +30,31 @@ return {
         map('gd', function() Snacks.picker.lsp_definitions() end, 'Goto Definition')
         map('gr', function() Snacks.picker.lsp_references() end, 'References')
 
-        -- Rename the variable under your cursor.
+        -- Rename the variable under your cursor
         map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
 
         -- Execute a code action
         map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
 
-        -- Find references for the word under your cursor.
+        -- Find references for the word under your cursor
         map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
 
-        -- Jump to the implementation of the word under your cursor.
+        -- Jump to the implementation of the word under your cursor
         map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
 
-        -- Jump to the definition of the word under your cursor.
+        -- Jump to the definition of the word under your cursor
         map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
 
-        -- Goto Declaration (e.g., in C this would take you to the header)
+        -- Goto Declaration
         map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
-        -- Fuzzy find all the symbols in your current document.
+        -- Fuzzy find all the symbols in your current document
         map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
 
-        -- Fuzzy find all the symbols in your current workspace.
+        -- Fuzzy find all the symbols in your current workspace
         map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
 
-        -- Jump to the type of the word under your cursor.
+        -- Jump to the type of the word under your cursor
         map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
         -- Helper function for checking LSP method support
@@ -72,10 +70,10 @@ return {
           end
         end
 
-        -- Document highlighting: highlight references of the word under cursor
+        -- Document highlighting
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
-          local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
+          local highlight_augroup = vim.api.nvim_create_augroup('lsp-highlight', { clear = false })
           vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
             buffer = event.buf,
             group = highlight_augroup,
@@ -89,10 +87,10 @@ return {
           })
 
           vim.api.nvim_create_autocmd('LspDetach', {
-            group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+            group = vim.api.nvim_create_augroup('lsp-detach', { clear = true }),
             callback = function(event2)
               vim.lsp.buf.clear_references()
-              vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+              vim.api.nvim_clear_autocmds { group = 'lsp-highlight', buffer = event2.buf }
             end,
           })
         end
@@ -137,8 +135,7 @@ return {
     -- Get enhanced capabilities from blink.cmp
     local capabilities = require('blink.cmp').get_lsp_capabilities()
 
-    -- Enable language servers
-    -- Add any additional servers here. They will automatically be installed by Mason.
+    -- Language servers configuration
     local servers = {
       lua_ls = {
         settings = {
@@ -149,24 +146,18 @@ return {
           },
         },
       },
-
-      -- C# (Unity)
-      omnisharp = {},
-
-      -- Python (AI)
-      basedpyright = {},
-
-      -- JavaScript/TypeScript
-      ts_ls = {},
+      omnisharp = {},     -- C# (Unity)
+      basedpyright = {},  -- Python
+      ts_ls = {},         -- JavaScript/TypeScript
     }
 
     -- Ensure the servers and tools are installed
     local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
-      'stylua', -- Lua formatter
-      'csharpier', -- C# formatter
-      'ruff', -- Python linter + formatter
-      'prettierd', -- JS/TS/JSON formatter
+      'stylua',     -- Lua formatter
+      'csharpier',  -- C# formatter
+      'ruff',       -- Python linter + formatter
+      'prettierd',  -- JS/TS/JSON formatter
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
