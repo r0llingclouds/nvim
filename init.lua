@@ -1,5 +1,4 @@
 -- Neovim Configuration
--- Modular structure based on kickstart.nvim
 
 require('core.options')
 require('core.keymaps')
