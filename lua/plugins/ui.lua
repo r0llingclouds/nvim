@@ -68,15 +68,16 @@ return {
       dashboard = {
         preset = {
           keys = {
-            { icon = ' ', key = 'e', desc = 'Explorer', action = ':lua Snacks.explorer({ cwd = vim.fn.getcwd() })' },
-            { icon = ' ', key = 'f', desc = 'Find File', action = ":lua Snacks.dashboard.pick('files')" },
-            { icon = ' ', key = 'n', desc = 'New File', action = ':ene | startinsert' },
-            { icon = ' ', key = 'g', desc = 'Find Text', action = ":lua Snacks.dashboard.pick('live_grep')" },
-            { icon = ' ', key = 'r', desc = 'Recent Files', action = ":lua Snacks.dashboard.pick('oldfiles')" },
+            { icon = '󰙅 ', key = 'e', desc = 'Explorer', action = ':lua Snacks.explorer({ cwd = vim.fn.getcwd() })' },
+            { icon = '󰈞 ', key = 'f', desc = 'Find File', action = ":lua Snacks.dashboard.pick('files')" },
+            { icon = '󰈔 ', key = 'n', desc = 'New File', action = ':ene | startinsert' },
+            { icon = '󰊄 ', key = 'g', desc = 'Find Text', action = ":lua Snacks.dashboard.pick('live_grep')" },
+            { icon = '󰋚 ', key = 'r', desc = 'Recent Files', action = ":lua Snacks.dashboard.pick('oldfiles')" },
             { icon = '󰒲 ', key = 'l', desc = 'Lazy', action = ':Lazy' },
-            { icon = ' ', key = 'q', desc = 'Quit', action = ':qa' },
+            { icon = '󰈆 ', key = 'q', desc = 'Quit', action = ':qa' },
           },
         },
+        -- here goes the header
         -- cat ~/.config/nvim/lua/assets/header.txt | lolcat -f -F 0.099 -S 95 > ~/.config/nvim/lua/assets/header.cat
         sections = {
           {
@@ -102,12 +103,42 @@ return {
       scroll = { enabled = true },
     },
     keys = {
-      { '<leader>e', function() Snacks.explorer() end, desc = 'Explorer' },
-      { '<leader>bd', function() Snacks.bufdelete() end, desc = 'Delete Buffer' },
-      { '<leader>bo', function() Snacks.bufdelete.other() end, desc = 'Delete Other Buffers' },
+      {
+        '<leader>e',
+        function()
+          Snacks.explorer()
+        end,
+        desc = 'Explorer',
+      },
+      {
+        '<leader>bd',
+        function()
+          Snacks.bufdelete()
+        end,
+        desc = 'Delete Buffer',
+      },
+      {
+        '<leader>bo',
+        function()
+          Snacks.bufdelete.other()
+        end,
+        desc = 'Delete Other Buffers',
+      },
       { '<leader>bz', toggle_zen, desc = 'Toggle Zen Mode' },
-      { '<leader>uc', function() Snacks.picker.colorschemes() end, desc = 'Colorschemes' },
-      { '<leader>ud', function() vim.o.background = vim.o.background == 'dark' and 'light' or 'dark' end, desc = 'Toggle Light/Dark' },
+      {
+        '<leader>uc',
+        function()
+          Snacks.picker.colorschemes()
+        end,
+        desc = 'Colorschemes',
+      },
+      {
+        '<leader>ud',
+        function()
+          vim.o.background = vim.o.background == 'dark' and 'light' or 'dark'
+        end,
+        desc = 'Toggle Light/Dark',
+      },
     },
   },
 
