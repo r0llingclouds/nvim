@@ -158,20 +158,10 @@ return {
 
       -- JavaScript/TypeScript
       ts_ls = {},
-
-      -- Swift (iOS/macOS)
-      sourcekit = {
-        cmd = { 'xcrun', 'sourcekit-lsp' },
-        filetypes = { 'swift', 'objective-c', 'objective-cpp' },
-        root_dir = require('lspconfig.util').root_pattern('Package.swift', '.git'),
-      },
     }
 
     -- Ensure the servers and tools are installed
-    -- Filter out servers not available in Mason (e.g., sourcekit comes with Xcode)
-    local ensure_installed = vim.tbl_filter(function(server)
-      return server ~= 'sourcekit'
-    end, vim.tbl_keys(servers or {}))
+    local ensure_installed = vim.tbl_keys(servers or {})
     vim.list_extend(ensure_installed, {
       'stylua', -- Lua formatter
       'csharpier', -- C# formatter
