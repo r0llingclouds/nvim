@@ -67,16 +67,6 @@ return {
     opts = {
       dashboard = {
         preset = {
-          header = [[
-
-               ████ ██████           █████      ██
-              ███████████             █████
-              █████████ ███████████████████ ███   ███████████
-             █████████  ███    █████████████ █████ ██████████████
-            █████████ ██████████ █████████ █████ █████ ████ █████
-          ███████████ ███    ███ █████████ █████ █████ ████ █████
-         ██████  █████████████████████ ████ █████ █████ ████ ██████
-      ]],
           keys = {
             { icon = ' ', key = 'e', desc = 'Explorer', action = ':lua Snacks.explorer({ cwd = vim.fn.getcwd() })' },
             { icon = ' ', key = 'f', desc = 'Find File', action = ":lua Snacks.dashboard.pick('files')" },
@@ -86,6 +76,19 @@ return {
             { icon = '󰒲 ', key = 'l', desc = 'Lazy', action = ':Lazy' },
             { icon = ' ', key = 'q', desc = 'Quit', action = ':qa' },
           },
+        },
+        -- cat ~/.config/nvim/lua/assets/header.txt | lolcat -f -F 0.099 -S 95 > ~/.config/nvim/lua/assets/header.cat
+        sections = {
+          {
+            section = 'terminal',
+            cmd = 'cat ~/.config/nvim/lua/assets/header.cat',
+            height = 12,
+            width = 80,
+            indent = -12,
+            padding = 0,
+          },
+          { section = 'keys', gap = 1, padding = 1 },
+          { section = 'startup' },
         },
       },
       explorer = {
