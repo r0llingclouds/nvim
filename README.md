@@ -74,16 +74,32 @@ nvim
 
 ## Language Support
 
-Configured with LSP and formatting for:
+I normally use the following:
 
-| Language | LSP Server | Formatter |
-|----------|------------|-----------|
+| Language | LSP Server | Formatter/Linter |
+|----------|------------|------------------|
 | Lua | lua_ls | stylua |
-| Swift | sourcekit-lsp | - |
+| Swift | sourcekit-lsp* | - |
 | C# (Unity) | omnisharp | csharpier |
 | Python | basedpyright | ruff |
 | JavaScript/TypeScript | ts_ls | prettierd |
 | JSON | - | prettierd |
+
+\* sourcekit-lsp is provided by Xcode toolchain, not Mason.
+
+The following LSP servers and formatters are installed via Mason:
+
+**LSP Servers:**
+- `lua-language-server` (lua_ls)
+- `basedpyright`
+- `omnisharp`
+- `typescript-language-server` (ts_ls)
+
+**Formatters/Linters:**
+- `stylua` - Lua formatter
+- `csharpier` - C# formatter
+- `ruff` - Python linter/formatter
+- `prettierd` - JS/TS/JSON formatter
 
 ## Key Mappings
 
