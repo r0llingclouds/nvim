@@ -1,15 +1,16 @@
 # Neovim Configuration
 
-Personal Neovim configuration based on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim), extended with LSP support, AI code assistance, and modern UI enhancements.
+Personal Neovim configuration with LSP support, AI code assistance, and modern UI enhancements.
 
 ## Requirements
 
-- Neovim >= 0.10.0
+- Neovim >= 0.11.0
 - Git
 - A [Nerd Font](https://www.nerdfonts.com/) (configured by default)
 - `make` (for telescope-fzf-native)
 - ripgrep (for live grep)
 - Node.js (for some language servers)
+- lolcat (for dashboard gradient header)
 
 ## Installation
 
@@ -65,6 +66,9 @@ nvim
 - **conform.nvim** - Code formatting (format on save)
 - **mini.ai** - Enhanced text objects
 - **mini.surround** - Surround operations
+- **mini.indentscope** - Animated scope highlighting
+- **indent-blankline.nvim** - Indent guides
+- **nvim-autopairs** - Auto-close brackets and quotes
 - **todo-comments.nvim** - Highlight TODO, FIXME, etc.
 - **guess-indent.nvim** - Auto-detect indentation
 
@@ -75,6 +79,7 @@ Configured with LSP and formatting for:
 | Language | LSP Server | Formatter |
 |----------|------------|-----------|
 | Lua | lua_ls | stylua |
+| Swift | sourcekit-lsp | - |
 | C# (Unity) | omnisharp | csharpier |
 | Python | basedpyright | ruff |
 | JavaScript/TypeScript | ts_ls | prettierd |
@@ -169,42 +174,43 @@ Leader key: `<Space>`
 
 ```
 ~/.config/nvim/
-├── init.lua                    # Main configuration
+├── init.lua                    # Entry point (loads core modules)
 ├── lua/
-│   ├── kickstart/              # Kickstart optional plugins
-│   │   └── plugins/
-│   │       ├── autopairs.lua
-│   │       ├── debug.lua
-│   │       ├── gitsigns.lua
-│   │       ├── indent_line.lua
-│   │       ├── lint.lua
-│   │       └── neo-tree.lua
-│   └── custom/                 # Custom plugins
-│       └── plugins/
-│           ├── bufferline.lua  # Buffer tabs
-│           ├── colorschemes.lua # Color themes
-│           ├── completion.lua  # blink.cmp config
-│           ├── copilot.lua     # GitHub Copilot
-│           ├── formatting.lua  # conform.nvim
-│           ├── lazydev.lua     # Lua dev tools
-│           ├── lsp.lua         # LSP configuration
-│           ├── noice.lua       # Floating UI
-│           ├── nvim-tmux-navigator.lua
-│           └── snacks.lua      # Dashboard, explorer, etc.
-└── lazy-lock.json              # Plugin version lock
+│   ├── core/                   # Core configuration
+│   │   ├── options.lua         # Vim options
+│   │   ├── keymaps.lua         # Non-plugin keybindings
+│   │   ├── autocmds.lua        # Autocommands
+│   │   └── lazy.lua            # Plugin manager setup
+│   ├── plugins/                # All plugin specs
+│   │   ├── colorscheme.lua
+│   │   ├── completion.lua
+│   │   ├── copilot.lua
+│   │   ├── debug.lua
+│   │   ├── editor.lua
+│   │   ├── formatting.lua
+│   │   ├── git.lua
+│   │   ├── indent.lua
+│   │   ├── lazydev.lua
+│   │   ├── lint.lua
+│   │   ├── lsp.lua
+│   │   ├── swift.lua
+│   │   ├── telescope.lua
+│   │   ├── tmux.lua
+│   │   ├── treesitter.lua
+│   │   └── ui.lua
+│   └── assets/                 # Dashboard assets
+│       ├── header.txt
+│       └── header.cat
+└── lazy-lock.json
 ```
 
 ## Customization
 
-Add custom plugins in `lua/custom/plugins/`. Files are automatically loaded by lazy.nvim.
+Add custom plugins by creating new files in `lua/plugins/`. Files are automatically loaded by lazy.nvim.
 
-To change the default colorscheme, edit `init.lua` and modify:
+To change the default colorscheme, edit `lua/core/options.lua` and modify:
 ```lua
 vim.cmd.colorscheme 'tokyonight-night'
 ```
 
 Or use `<leader>uc` to pick a colorscheme interactively.
-
-## Credits
-
-- [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim) by TJ DeVries
