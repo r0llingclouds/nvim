@@ -51,12 +51,12 @@ nvim
 - **snacks.picker** - Additional picker functionality
 
 ### UI & Navigation
-- **tokyonight.nvim** - Default color scheme (night variant)
+- **dracula.nvim** - Default color scheme (classic dark theme)
+- **tokyonight.nvim** - Popular night-inspired theme
 - **catppuccin** - Popular pastel theme
 - **kanagawa.nvim** - Wave-inspired theme
 - **zenbones.nvim** - Minimal bone-colored themes
 - **everforest-nvim** - Green-based comfortable theme
-- **dracula.nvim** - Classic dark theme
 - **bufferline.nvim** - Buffer tabs with LSP diagnostics
 - **snacks.nvim** - Dashboard, file explorer, picker, smooth scroll, zen mode
 - **noice.nvim** - Floating cmdline, search, and notifications
@@ -228,9 +228,9 @@ Leader key: `<Space>`
 
 Add custom plugins by creating new files in `lua/plugins/`. Files are automatically loaded by lazy.nvim.
 
-To change the default colorscheme, edit `lua/core/options.lua` and modify:
+To change the default colorscheme, edit `lua/plugins/colorscheme.lua` and modify the theme with `priority = 1000`:
 ```lua
-vim.cmd.colorscheme 'tokyonight-night'
+vim.cmd.colorscheme 'dracula'
 ```
 
 Or use `<leader>uc` to pick a colorscheme interactively.

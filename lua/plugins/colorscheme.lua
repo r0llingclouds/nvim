@@ -1,10 +1,10 @@
 -- Colorschemes: all themes consolidated
 
 return {
-  -- Tokyonight (default)
+  -- Tokyonight
   {
     'folke/tokyonight.nvim',
-    priority = 1000,
+    lazy = true,
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('tokyonight').setup {
@@ -12,8 +12,6 @@ return {
           comments = { italic = false },
         },
       }
-      -- Set as default colorscheme
-      vim.cmd.colorscheme 'tokyonight-night'
     end,
   },
 
@@ -46,8 +44,14 @@ return {
     },
   },
 
-  -- Additional themes
-  { 'Mofiqul/dracula.nvim', lazy = true },
+  -- Dracula (default)
+  {
+    'Mofiqul/dracula.nvim',
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme 'dracula'
+    end,
+  },
   { 'catppuccin/nvim', name = 'catppuccin', lazy = true },
   { 'rebelot/kanagawa.nvim', lazy = true },
   { 'zenbones-theme/zenbones.nvim', dependencies = { 'rktjmp/lush.nvim' }, lazy = true },
