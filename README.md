@@ -1,5 +1,9 @@
 # Neovim Configuration
 
+<div align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Neovim-mark.svg/1680px-Neovim-mark.svg.png" alt="Neovim Logo" width="200"/>
+</div>
+
 Personal Neovim configuration with LSP support, AI code assistance, and modern UI enhancements.
 
 ## Requirements
