@@ -1,4 +1,4 @@
-# Neovim Configuration
+# My Neovim configuration
 
 <div align="center">
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Neovim-mark.svg/1680px-Neovim-mark.svg.png" alt="Neovim Logo" width="200"/>
