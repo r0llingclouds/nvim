@@ -83,7 +83,7 @@ return {
           {
             section = 'terminal',
             cmd = 'cat ~/.config/nvim/lua/assets/header.cat',
-            height = 15,
+            height = 13,
             width = 80,
             indent = -12,
             padding = 0,
