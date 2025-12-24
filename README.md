@@ -44,6 +44,7 @@ nvim
 
 ### AI Assistance
 - **copilot.lua** - GitHub Copilot integration with ghost text suggestions
+- **avante.nvim** - AI-powered code assistant with chat interface (Cursor-like experience). Supports Claude and other LLM providers for code generation, editing, and explanation directly in the editor
 
 ### Fuzzy Finding
 - **telescope.nvim** - Fuzzy finder for files, grep, LSP symbols
@@ -202,6 +203,7 @@ Leader key: `<Space>`
 │   │   ├── autocmds.lua        # Autocommands
 │   │   └── lazy.lua            # Plugin manager setup
 │   ├── plugins/                # All plugin specs
+│   │   ├── avante.lua
 │   │   ├── colorscheme.lua
 │   │   ├── completion.lua
 │   │   ├── copilot.lua
