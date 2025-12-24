@@ -180,6 +180,42 @@ Leader key: `<Space>`
 | `<M-[>` | Previous suggestion |
 | `<C-]>` | Dismiss suggestion |
 
+### Avante (AI Chat)
+| Key | Description |
+|-----|-------------|
+| `<leader>aa` | Open Avante sidebar |
+| `<leader>at` | Toggle sidebar |
+| `<leader>af` | Focus sidebar |
+| `<leader>ar` | Refresh sidebar |
+| `<leader>ae` | Edit selected code |
+| `<leader>a?` | Select AI model |
+| `<leader>an` | New conversation |
+| `<leader>ah` | Chat history |
+| `<leader>aS` | Stop AI response |
+| `<leader>ac` | Add current buffer to context |
+| `<leader>aB` | Add all buffers to context |
+
+**In Avante sidebar:**
+| Key | Description |
+|-----|-------------|
+| `a` | Apply change at cursor |
+| `A` | Apply all changes |
+| `r` | Retry request |
+| `e` | Edit request |
+| `@` | Add file to context |
+| `d` | Remove file from context |
+| `q` | Close sidebar |
+| `<Tab>` | Switch windows |
+| `]p` / `[p` | Next/prev prompt |
+
+**Diff conflicts:**
+| Key | Description |
+|-----|-------------|
+| `co` | Choose ours (current) |
+| `ct` | Choose theirs (incoming) |
+| `cb` | Choose both |
+| `]x` / `[x` | Next/prev conflict |
+
 ### UI Toggles
 | Key | Description |
 |-----|-------------|
