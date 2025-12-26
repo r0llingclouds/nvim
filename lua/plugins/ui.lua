@@ -126,6 +126,27 @@ return {
       },
       { '<leader>bz', toggle_zen, desc = 'Toggle Zen Mode' },
       {
+        '<leader>st',
+        function()
+          Snacks.picker.todo_comments()
+        end,
+        desc = 'Search TODOs',
+      },
+      {
+        '<leader>sf',
+        function()
+          Snacks.picker.todo_comments({ keywords = { 'FIX', 'BUG', 'FIXME', 'ISSUE' } })
+        end,
+        desc = 'Search FIX/BUG',
+      },
+      {
+        '<leader>sn',
+        function()
+          Snacks.picker.todo_comments({ keywords = { 'NOTE', 'INFO' } })
+        end,
+        desc = 'Search NOTEs',
+      },
+      {
         '<leader>uc',
         function()
           Snacks.picker.colorschemes()
