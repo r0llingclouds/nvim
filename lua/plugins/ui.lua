@@ -5,6 +5,9 @@
 local zen_active = false
 local zen_saved = {}
 
+-- Transparency toggle state
+local transparent = false
+
 local function toggle_zen()
   zen_active = not zen_active
 
@@ -55,6 +58,18 @@ local function toggle_zen()
 
     -- Disable dim
     Snacks.dim.disable()
+  end
+end
+
+local function toggle_transparency()
+  transparent = not transparent
+  if transparent then
+    vim.api.nvim_set_hl(0, 'Normal', { bg = 'NONE', ctermbg = 'NONE' })
+    vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'NONE', ctermbg = 'NONE' })
+    vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'NONE', ctermbg = 'NONE' })
+    vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'NONE', ctermbg = 'NONE' })
+  else
+    vim.cmd.colorscheme(vim.g.colors_name)
   end
 end
 
@@ -159,6 +174,11 @@ return {
           vim.o.background = vim.o.background == 'dark' and 'light' or 'dark'
         end,
         desc = 'Toggle Light/Dark',
+      },
+      {
+        '<leader>ut',
+        toggle_transparency,
+        desc = 'Toggle Transparency',
       },
     },
   },
