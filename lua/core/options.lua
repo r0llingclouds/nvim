@@ -30,7 +30,11 @@ vim.schedule(function()
   vim.o.clipboard = 'unnamedplus'
 end)
 
--- Enable break indent
+-- Enable soft wrap (linebreak prevents splitting words)
+vim.o.wrap = true
+vim.o.linebreak = true
+
+-- Enable break indent (wrapped lines preserve indentation)
 vim.o.breakindent = true
 
 -- Save undo history

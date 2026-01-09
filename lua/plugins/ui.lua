@@ -1,6 +1,6 @@
 ---@diagnostic disable: undefined-global
 -- UI plugins: snacks, bufferline, noice
-
+-- TODO: keymaps for resizing windows
 -- Custom zen mode state
 local zen_active = false
 local zen_saved = {}
@@ -150,14 +150,14 @@ return {
       {
         '<leader>sf',
         function()
-          Snacks.picker.todo_comments({ keywords = { 'FIX', 'BUG', 'FIXME', 'ISSUE' } })
+          Snacks.picker.todo_comments { keywords = { 'FIX', 'BUG', 'FIXME', 'ISSUE' } }
         end,
         desc = 'Search FIX/BUG',
       },
       {
         '<leader>sn',
         function()
-          Snacks.picker.todo_comments({ keywords = { 'NOTE', 'INFO' } })
+          Snacks.picker.todo_comments { keywords = { 'NOTE', 'INFO' } }
         end,
         desc = 'Search NOTEs',
       },
@@ -179,6 +179,13 @@ return {
         '<leader>ut',
         toggle_transparency,
         desc = 'Toggle Transparency',
+      },
+      {
+        '<leader>uw',
+        function()
+          vim.o.wrap = not vim.o.wrap
+        end,
+        desc = 'Toggle Wrap',
       },
     },
   },
