@@ -57,4 +57,5 @@ return {
   { 'zenbones-theme/zenbones.nvim', dependencies = { 'rktjmp/lush.nvim' }, lazy = true },
   { 'neanias/everforest-nvim', lazy = true },
   { 'ellisonleao/gruvbox.nvim', lazy = true, config = true, opts = {} },
+  { 'oskarnurm/koda.nvim', lazy = true },
 }
