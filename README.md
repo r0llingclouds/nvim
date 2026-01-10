@@ -58,6 +58,7 @@ nvim
 - **kanagawa.nvim** - Wave-inspired theme
 - **zenbones.nvim** - Minimal bone-colored themes
 - **everforest-nvim** - Green-based comfortable theme
+- **koda.nvim** - Elegant dark theme
 - **bufferline.nvim** - Buffer tabs with LSP diagnostics
 - **snacks.nvim** - Dashboard, file explorer, picker, smooth scroll, zen mode
 - **noice.nvim** - Floating cmdline, search, and notifications
