@@ -64,6 +64,7 @@ nvim
 - **noice.nvim** - Floating cmdline, search, and notifications
 - **which-key.nvim** - Keybinding hints (helix preset)
 - **mini.statusline** - Minimal statusline
+- **harpoon** - Quick file navigation list
 - **vim-tmux-navigator** - Seamless tmux/vim pane navigation
 
 ### Editor Enhancements
@@ -140,6 +141,18 @@ Leader key: `<Space>`
 | `<leader>bb` | Switch to alternate buffer |
 | `<leader>bp` | Pin buffer |
 | `<leader>bz` | Toggle Zen mode |
+
+### Harpoon
+| Key | Description |
+|-----|-------------|
+| `<leader>ma` | Add file to Harpoon |
+| `<leader>mm` | Toggle Harpoon menu |
+| `<leader>m1` | Jump to Harpoon file 1 |
+| `<leader>m2` | Jump to Harpoon file 2 |
+| `<leader>m3` | Jump to Harpoon file 3 |
+| `<leader>m4` | Jump to Harpoon file 4 |
+| `<leader>mp` | Harpoon previous |
+| `<leader>mn` | Harpoon next |
 
 ### Window Management
 | Key | Description |
@@ -246,6 +259,7 @@ Leader key: `<Space>`
 │   │   ├── copilot.lua
 │   │   ├── debug.lua
 │   │   ├── editor.lua
+│   │   ├── harpoon.lua
 │   │   ├── formatting.lua
 │   │   ├── git.lua
 │   │   ├── indent.lua
