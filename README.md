@@ -43,7 +43,6 @@ nvim
 - **fidget.nvim** - LSP progress indicator
 
 ### AI Assistance
-- **copilot.lua** - GitHub Copilot integration with ghost text suggestions
 - **avante.nvim** - AI-powered code assistant with chat interface (Cursor-like experience). Supports Claude and other LLM providers for code generation, editing, and explanation directly in the editor
 
 ### Fuzzy Finding
@@ -186,14 +185,6 @@ Leader key: `<Space>`
 | `<C-k>` | Previous suggestion |
 | `<C-Space>` | Show documentation |
 
-### Copilot (Insert Mode)
-| Key | Description |
-|-----|-------------|
-| `<Tab>` | Accept suggestion |
-| `<M-]>` | Next suggestion |
-| `<M-[>` | Previous suggestion |
-| `<C-]>` | Dismiss suggestion |
-
 ### Avante (AI Chat)
 | Key | Description |
 |-----|-------------|
@@ -256,7 +247,6 @@ Leader key: `<Space>`
 │   │   ├── avante.lua
 │   │   ├── colorscheme.lua
 │   │   ├── completion.lua
-│   │   ├── copilot.lua
 │   │   ├── debug.lua
 │   │   ├── editor.lua
 │   │   ├── harpoon.lua
