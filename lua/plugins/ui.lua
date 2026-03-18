@@ -6,7 +6,7 @@ local zen_active = false
 local zen_saved = {}
 
 -- Transparency toggle state
-local transparent = false
+local transparent = true
 
 local function toggle_zen()
   zen_active = not zen_active
@@ -72,6 +72,17 @@ local function toggle_transparency()
     vim.cmd.colorscheme(vim.g.colors_name)
   end
 end
+
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    if transparent then
+      vim.api.nvim_set_hl(0, 'Normal', { bg = 'NONE', ctermbg = 'NONE' })
+      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'NONE', ctermbg = 'NONE' })
+      vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'NONE', ctermbg = 'NONE' })
+      vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'NONE', ctermbg = 'NONE' })
+    end
+  end,
+})
 
 return {
   -- Snacks: dashboard, explorer, picker, zen mode
