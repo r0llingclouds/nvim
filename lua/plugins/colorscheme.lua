@@ -58,4 +58,5 @@ return {
   { 'neanias/everforest-nvim', lazy = true },
   { 'ellisonleao/gruvbox.nvim', lazy = true, config = true, opts = {} },
   { 'oskarnurm/koda.nvim', lazy = true },
+  { 'maxmx03/solarized.nvim', lazy = true },
 }
