@@ -253,6 +253,13 @@ return {
 
   -- Noice: replaces Neovim UI for messages, cmdline, and popups
   {
+    'rcarriga/nvim-notify',
+    opts = {
+      -- Needed because transparency is enabled, so NotifyBackground has no bg.
+      background_colour = '#000000',
+    },
+  },
+  {
     'folke/noice.nvim',
     event = 'VeryLazy',
     dependencies = {
