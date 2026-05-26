@@ -67,6 +67,13 @@ return {
       'MeanderingProgrammer/render-markdown.nvim',
       opts = {
         file_types = { 'markdown', 'Avante' },
+        -- Markdown opens un-rendered (plain treesitter highlighting); toggle on with <leader>tm.
+        -- Avante's panel has no override, so it still renders via the global default.
+        overrides = {
+          filetype = {
+            markdown = { enabled = false },
+          },
+        },
       },
       ft = { 'markdown', 'Avante' },
       keys = {
