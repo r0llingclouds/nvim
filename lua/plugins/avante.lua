@@ -69,6 +69,9 @@ return {
         file_types = { 'markdown', 'Avante' },
       },
       ft = { 'markdown', 'Avante' },
+      keys = {
+        { '<leader>tm', '<cmd>RenderMarkdown buf_toggle<cr>', desc = 'Toggle [M]arkdown render (buffer)' },
+      },
     },
   },
 }

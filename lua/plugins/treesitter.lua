@@ -2,13 +2,18 @@
 
 return {
   'nvim-treesitter/nvim-treesitter',
+  branch = 'main',
   build = ':TSUpdate',
   config = function()
-    ---@diagnostic disable-next-line: missing-fields
-    require('nvim-treesitter').setup {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      auto_install = true,
-    }
+    -- main-branch API: install parsers explicitly (ensure_installed/auto_install no longer exist)
+    require('nvim-treesitter').install { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+
+    -- main-branch API: highlighting is not automatic; start it per-buffer (replaces highlight = { enable = true })
+    vim.api.nvim_create_autocmd('FileType', {
+      callback = function(args)
+        pcall(vim.treesitter.start, args.buf)
+      end,
+    })
 
     -- Additional vim regex highlighting for Ruby
     vim.api.nvim_create_autocmd('FileType', {
