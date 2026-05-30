@@ -1,4 +1,5 @@
--- Debug Adapter Protocol (DAP) for debugging
+-- Debug Adapter Protocol (DAP)
+-- Python (debugpy), .NET/Unity (netcoredbg + nvim-dap-unity), Swift/native (codelldb).
 
 return {
   'mfussenegger/nvim-dap',
@@ -7,7 +8,10 @@ return {
     'nvim-neotest/nvim-nio',
     'mason-org/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
-    'leoluz/nvim-dap-go',
+
+    -- Language-specific adapters
+    'mfussenegger/nvim-dap-python', -- Python
+    'ownself/nvim-dap-unity', -- attach to the Unity editor/player
   },
   keys = {
     { '<F5>', function() require('dap').continue() end, desc = 'Debug: Start/Continue' },
@@ -24,9 +28,16 @@ return {
 
     require('mason-nvim-dap').setup {
       automatic_installation = true,
-      handlers = {},
+      -- Default handler wires dap.adapters/configurations for installed adapters.
+      handlers = {
+        function(config)
+          require('mason-nvim-dap').default_setup(config)
+        end,
+      },
       ensure_installed = {
-        'delve',
+        'python', -- debugpy
+        'netcoredbg', -- .NET / Unity (C#)
+        'codelldb', -- Swift / native (used by xcodebuild.nvim too)
       },
     }
 
@@ -51,11 +62,12 @@ return {
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
-    -- Install golang specific config
-    require('dap-go').setup {
-      delve = {
-        detached = vim.fn.has 'win32' == 0,
-      },
-    }
+    -- Python: point debugpy at Mason's own venv interpreter (not system python3).
+    require('dap-python').setup(vim.fn.stdpath 'data' .. '/mason/packages/debugpy/venv/bin/python')
+
+    -- Unity: <F5> on a .cs buffer offers "Attach to Unity" (start Play mode first).
+    pcall(function()
+      require('nvim-dap-unity').setup { auto_setup_dap = true }
+    end)
   end,
 }

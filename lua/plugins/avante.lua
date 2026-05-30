@@ -1,17 +1,20 @@
 return {
   'yetone/avante.nvim',
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-  -- ⚠️ must add this setting! ! !
   build = vim.fn.has 'win32' ~= 0 and 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' or 'make',
-  event = 'VeryLazy',
+  -- Load on demand instead of every session (drops the eager startup cost).
+  cmd = { 'AvanteAsk', 'AvanteToggle', 'AvanteEdit', 'AvanteChat', 'AvanteRefresh' },
+  keys = {
+    { '<leader>aa', '<cmd>AvanteToggle<cr>', desc = 'Avante: toggle' },
+    { '<leader>ak', '<cmd>AvanteAsk<cr>', mode = { 'n', 'v' }, desc = 'Avante: ask' },
+    { '<leader>ae', '<cmd>AvanteEdit<cr>', mode = 'v', desc = 'Avante: edit' },
+    { '<leader>ar', '<cmd>AvanteRefresh<cr>', desc = 'Avante: refresh' },
+  },
   version = false, -- Never set this value to "*"! Never!
   ---@module 'avante'
   ---@type avante.Config
   opts = {
-    -- add any opts here
-    -- this file can contain specific instructions for your project
     instructions_file = 'avante.md',
-    -- for example
     provider = 'claude',
     providers = {
       claude = {
@@ -33,18 +36,18 @@ return {
         },
       },
     },
+    -- Reuse already-loaded UIs instead of pulling extra picker/input engines.
+    selector = { provider = 'telescope' },
+    input = { provider = 'snacks' },
   },
   dependencies = {
     'nvim-lua/plenary.nvim',
     'MunifTanjim/nui.nvim',
-    --- The below dependencies are optional,
-    'nvim-mini/mini.pick', -- for file_selector provider mini.pick
-    'nvim-telescope/telescope.nvim', -- for file_selector provider telescope
-    'hrsh7th/nvim-cmp', -- autocompletion for avante commands and mentions
-    'ibhagwan/fzf-lua', -- for file_selector provider fzf
-    'stevearc/dressing.nvim', -- for input provider dressing
-    'folke/snacks.nvim', -- for input provider snacks
-    'nvim-tree/nvim-web-devicons', -- or echasnovski/mini.icons
+    'nvim-telescope/telescope.nvim', -- file selector
+    'folke/snacks.nvim', -- input provider
+    'nvim-tree/nvim-web-devicons',
+    -- @mention / command completion is provided through blink (blink-cmp-avante,
+    -- registered in completion.lua) — no nvim-cmp needed.
     {
       -- support for image pasting
       'HakonHarnes/img-clip.nvim',

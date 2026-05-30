@@ -19,6 +19,8 @@ return {
       opts = {},
     },
     'folke/lazydev.nvim',
+    -- Completion for avante's @mentions / commands without pulling in nvim-cmp.
+    'Kaiser-Yang/blink-cmp-avante',
   },
   --- @module 'blink.cmp'
   --- @type blink.cmp.Config
@@ -38,15 +40,18 @@ return {
     },
 
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'lazydev' },
+      default = { 'lsp', 'path', 'snippets', 'lazydev', 'avante' },
       providers = {
         lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+        avante = { module = 'blink-cmp-avante', name = 'Avante' },
       },
     },
 
     snippets = { preset = 'luasnip' },
 
-    fuzzy = { implementation = 'lua' },
+    -- Prefer the prebuilt Rust fuzzy matcher (auto-downloaded for the v1.* tag on
+    -- Apple Silicon; no cargo needed). Falls back to Lua if the binary is missing.
+    fuzzy = { implementation = 'prefer_rust' },
 
     signature = { enabled = true },
   },

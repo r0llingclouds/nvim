@@ -5,4 +5,5 @@ nvim
 .DS_Store
 
 spell/
-lazy-lock.json
+
+# lazy-lock.json is intentionally tracked so /nvim-restore reproduces tested pins.

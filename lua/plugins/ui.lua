@@ -1,12 +1,18 @@
 ---@diagnostic disable: undefined-global
 -- UI plugins: snacks, bufferline, noice
--- TODO: keymaps for resizing windows
 -- Custom zen mode state
 local zen_active = false
 local zen_saved = {}
 
 -- Transparency toggle state
 local transparent = true
+
+local function apply_transparency()
+  vim.api.nvim_set_hl(0, 'Normal', { bg = 'NONE', ctermbg = 'NONE' })
+  vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'NONE', ctermbg = 'NONE' })
+  vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'NONE', ctermbg = 'NONE' })
+  vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'NONE', ctermbg = 'NONE' })
+end
 
 local function toggle_zen()
   zen_active = not zen_active
@@ -64,22 +70,19 @@ end
 local function toggle_transparency()
   transparent = not transparent
   if transparent then
-    vim.api.nvim_set_hl(0, 'Normal', { bg = 'NONE', ctermbg = 'NONE' })
-    vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'NONE', ctermbg = 'NONE' })
-    vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'NONE', ctermbg = 'NONE' })
-    vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'NONE', ctermbg = 'NONE' })
+    apply_transparency()
   else
     vim.cmd.colorscheme(vim.g.colors_name)
   end
 end
 
-vim.api.nvim_create_autocmd('VimEnter', {
+-- Apply transparency on startup AND whenever the colorscheme changes — the
+-- colorscheme picker (<leader>uc) and light/dark toggle (<leader>ud) fire
+-- ColorScheme and would otherwise drop the forced transparency.
+vim.api.nvim_create_autocmd({ 'VimEnter', 'ColorScheme' }, {
   callback = function()
     if transparent then
-      vim.api.nvim_set_hl(0, 'Normal', { bg = 'NONE', ctermbg = 'NONE' })
-      vim.api.nvim_set_hl(0, 'NormalFloat', { bg = 'NONE', ctermbg = 'NONE' })
-      vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'NONE', ctermbg = 'NONE' })
-      vim.api.nvim_set_hl(0, 'NormalNC', { bg = 'NONE', ctermbg = 'NONE' })
+      apply_transparency()
     end
   end,
 })
@@ -127,6 +130,8 @@ return {
       bufdelete = { enabled = true },
       dim = { enabled = true },
       scroll = { enabled = true },
+      -- Auto-disable LSP/treesitter on huge generated C#/JSON/TS bundles.
+      bigfile = { enabled = true },
     },
     keys = {
       {
@@ -197,6 +202,21 @@ return {
           vim.o.wrap = not vim.o.wrap
         end,
         desc = 'Toggle Wrap',
+      },
+      -- Git TUI / browse (lazygit requires: brew install lazygit)
+      {
+        '<leader>gg',
+        function()
+          Snacks.lazygit()
+        end,
+        desc = 'Lazygit',
+      },
+      {
+        '<leader>gb',
+        function()
+          Snacks.gitbrowse()
+        end,
+        desc = 'Git browse (open in browser)',
       },
     },
   },

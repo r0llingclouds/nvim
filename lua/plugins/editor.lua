@@ -1,4 +1,4 @@
--- Editor enhancements: which-key, autopairs, mini.nvim, todo-comments, guess-indent
+-- Editor enhancements: which-key, autopairs, mini.*, todo-comments, guess-indent
 
 return {
   -- Detect tabstop and shiftwidth automatically
@@ -53,8 +53,20 @@ return {
       },
       spec = {
         { '<leader>s', group = '[S]earch' },
-        { '<leader>t', group = '[T]oggle' },
+        { '<leader>t', group = '[T]est / Toggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>m', group = 'Harpoon' },
+        { '<leader>u', group = '[U]I / Toggle' },
+        { '<leader>n', group = '.[N]ET' },
+        { '<leader>x', group = 'Diagnostics/Trouble' },
+        { '<leader>q', group = 'Session/Quit' },
+        { '<leader>j', group = '[J]upyter' },
+        { '<leader>a', group = '[A]vante AI' },
+        { '<leader>c', group = '[C]ode' },
+        { '<leader>g', group = '[G]it' },
+        { '<leader>v', group = '[V]env' },
+        { '<leader>X', group = '[X]code' },
+        { 'gs', group = '[S]urround' },
         {
           '<leader>w',
           group = 'windows',
@@ -99,24 +111,39 @@ return {
     opts = { signs = false },
   },
 
-  -- Mini.nvim: collection of small independent plugins
+  -- mini.* split from the monorepo so the statusline stays start-time while the
+  -- editing modules defer to the first real buffer.
   {
-    'echasnovski/mini.nvim',
+    'echasnovski/mini.statusline',
+    lazy = false,
     config = function()
-      -- Better Around/Inside textobjects
-      require('mini.ai').setup { n_lines = 500 }
-
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
-      require('mini.surround').setup()
-
-      -- Simple and easy statusline
       local statusline = require 'mini.statusline'
       statusline.setup { use_icons = vim.g.have_nerd_font }
-
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function()
         return '%2l:%-2v %P'
       end
     end,
+  },
+  {
+    'echasnovski/mini.ai',
+    event = { 'BufReadPre', 'BufNewFile' },
+    opts = { n_lines = 500 },
+  },
+  {
+    'echasnovski/mini.surround',
+    event = { 'BufReadPre', 'BufNewFile' },
+    -- Remapped to the `gs` prefix so flash.nvim can own the bare `s` jump key.
+    opts = {
+      mappings = {
+        add = 'gsa',
+        delete = 'gsd',
+        find = 'gsf',
+        find_left = 'gsF',
+        highlight = 'gsh',
+        replace = 'gsr',
+        update_n_lines = 'gsn',
+      },
+    },
   },
 }

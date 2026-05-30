@@ -1,26 +1,42 @@
 ---@diagnostic disable: undefined-global
 -- LSP Configuration
--- Language Server Protocol support with Mason for server management
+-- nvim 0.11+ native vim.lsp.config / vim.lsp.enable, with Mason for install management.
+-- Per-server settings live in vim.lsp.config(name, {...}); mason-lspconfig installs +
+-- auto-enables them. (The old mason-lspconfig v2 `handlers` block was dead code — its
+-- per-server settings never applied. This converges on the same pattern swift.lua uses.)
 
 return {
   'neovim/nvim-lspconfig',
   dependencies = {
-    -- Mason must be loaded before its dependents
-    { 'mason-org/mason.nvim', opts = {} },
+    -- Mason must be loaded before its dependents.
+    {
+      'mason-org/mason.nvim',
+      opts = {
+        registries = {
+          'github:mason-org/mason-registry',
+          'github:Crashdummyy/mason-registry', -- provides `roslyn` (C#/Unity LS)
+        },
+      },
+    },
     'mason-org/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
 
     -- Useful status updates for LSP
     { 'j-hui/fidget.nvim', opts = {} },
 
-    -- Allows extra capabilities provided by blink.cmp
+    -- blink.cmp already injects its enhanced capabilities globally via vim.lsp.config('*').
     'saghen/blink.cmp',
+
+    -- JSON/YAML schema catalog for jsonls/yamlls
+    'b0o/SchemaStore.nvim',
   },
   config = function()
-    -- This function gets run when an LSP attaches to a particular buffer
+    -- This runs when an LSP attaches to a particular buffer.
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
       callback = function(event)
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
+
         local map = function(keys, func, desc, mode)
           mode = mode or 'n'
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
@@ -57,22 +73,18 @@ return {
         -- Jump to the type of the word under your cursor
         map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
-        -- Helper function for checking LSP method support
-        ---@param client vim.lsp.Client
         ---@param method vim.lsp.protocol.Method
-        ---@param bufnr? integer
-        ---@return boolean
-        local function client_supports_method(client, method, bufnr)
-          if vim.fn.has 'nvim-0.11' == 1 then
-            return client:supports_method(method, bufnr)
-          else
-            return client.supports_method(method, { bufnr = bufnr })
-          end
+        local function supports(method)
+          return client and client:supports_method(method, event.buf)
         end
 
-        -- Document highlighting
-        local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
+        -- Ruff is lint/fix/imports only; let basedpyright own hover for Python.
+        if client and client.name == 'ruff' then
+          client.server_capabilities.hoverProvider = false
+        end
+
+        -- Document highlighting under the cursor
+        if client and supports(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
           local highlight_augroup = vim.api.nvim_create_augroup('lsp-highlight', { clear = false })
           vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
             buffer = event.buf,
@@ -95,10 +107,11 @@ return {
           })
         end
 
-        -- Toggle inlay hints if supported
-        if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
+        -- Inlay hints: on by default where supported, with a toggle.
+        if client and supports(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+          vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
           map('<leader>th', function()
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }, { bufnr = event.buf })
           end, '[T]oggle Inlay [H]ints')
         end
       end,
@@ -132,45 +145,115 @@ return {
       },
     }
 
-    -- Get enhanced capabilities from blink.cmp
-    local capabilities = require('blink.cmp').get_lsp_capabilities()
+    -- ── Per-server settings (native API) ───────────────────────────────────────
+    -- blink.cmp injects capabilities globally; no manual merge needed here.
 
-    -- Language servers configuration
-    local servers = {
-      lua_ls = {
-        settings = {
-          Lua = {
-            completion = {
-              callSnippet = 'Replace',
+    vim.lsp.config('lua_ls', {
+      settings = {
+        Lua = {
+          completion = { callSnippet = 'Replace' },
+        },
+      },
+    })
+
+    -- Python (types/hover). Ruff (below) owns lint/fix/imports.
+    vim.lsp.config('basedpyright', {
+      settings = {
+        basedpyright = {
+          analysis = {
+            typeCheckingMode = 'standard', -- 'recommended' floods dynamic ML code
+            diagnosticMode = 'openFilesOnly', -- lighter on large ML repos
+            autoImportCompletions = true,
+            inlayHints = {
+              variableTypes = true,
+              callArgumentNames = true,
+              functionReturnTypes = true,
+              genericTypes = false,
             },
           },
         },
       },
-      omnisharp = {},     -- C# (Unity)
-      basedpyright = {},  -- Python
-      ts_ls = {},         -- JavaScript/TypeScript
+    })
+
+    vim.lsp.config('ruff', {}) -- hover disabled on attach above
+
+    -- TypeScript/JS — vtsls is the better-supported 2026 default (real inlay-hint settings).
+    vim.lsp.config('vtsls', {
+      settings = {
+        typescript = {
+          inlayHints = {
+            parameterNames = { enabled = 'literals' },
+            variableTypes = { enabled = false },
+            propertyDeclarationTypes = { enabled = true },
+            functionLikeReturnTypes = { enabled = true },
+          },
+          preferences = { importModuleSpecifier = 'non-relative' },
+        },
+        javascript = {
+          inlayHints = { parameterNames = { enabled = 'all' } },
+        },
+      },
+    })
+
+    vim.lsp.config('tailwindcss', {
+      filetypes = { 'html', 'css', 'scss', 'javascriptreact', 'typescriptreact', 'svelte', 'astro' },
+    })
+
+    vim.lsp.config('cssls', {})
+    vim.lsp.config('html', {})
+    vim.lsp.config('emmet_language_server', {
+      filetypes = { 'html', 'css', 'javascriptreact', 'typescriptreact', 'svelte', 'astro' },
+    })
+
+    vim.lsp.config('jsonls', {
+      settings = {
+        json = {
+          schemas = require('schemastore').json.schemas(),
+          validate = { enable = true },
+        },
+      },
+    })
+
+    vim.lsp.config('yamlls', {
+      settings = {
+        yaml = {
+          schemaStore = { enable = false, url = '' },
+          schemas = require('schemastore').yaml.schemas(),
+        },
+      },
+    })
+
+    -- ── Tooling install (non-LSP CLIs: formatters + linters) ───────────────────
+    require('mason-tool-installer').setup {
+      ensure_installed = {
+        'stylua', -- Lua formatter
+        'csharpier', -- C# formatter
+        'prettierd', -- JS/TS/JSON/CSS/etc formatter
+        'ruff', -- Python linter/formatter (also runs as ruff LSP)
+        'eslint_d', -- JS/TS linter
+        'markdownlint', -- Markdown linter
+        'taplo', -- TOML formatter
+      },
     }
 
-    -- Ensure the servers and tools are installed
-    local ensure_installed = vim.tbl_keys(servers or {})
-    vim.list_extend(ensure_installed, {
-      'stylua',     -- Lua formatter
-      'csharpier',  -- C# formatter
-      'ruff',       -- Python linter + formatter
-      'prettierd',  -- JS/TS/JSON formatter
-    })
-    require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-
+    -- ── Server install + auto-enable ───────────────────────────────────────────
+    -- C# is handled by roslyn.nvim (see roslyn.lua), Swift by swift.lua — both
+    -- excluded from automatic_enable so legacy/duplicate servers don't also attach.
     require('mason-lspconfig').setup {
-      ensure_installed = {},
-      automatic_installation = false,
-      handlers = {
-        function(server_name)
-          local server = servers[server_name] or {}
-          server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-          require('lspconfig')[server_name].setup(server)
-        end,
+      ensure_installed = {
+        'lua_ls',
+        'basedpyright',
+        'ruff',
+        'vtsls',
+        'tailwindcss',
+        'cssls',
+        'html',
+        'emmet_language_server',
+        'jsonls',
+        'yamlls',
       },
+      -- Don't auto-enable leftover/legacy servers that may still be installed in Mason.
+      automatic_enable = { exclude = { 'omnisharp', 'ts_ls' } },
     }
   end,
 }

@@ -19,7 +19,7 @@ require('lazy').setup({
   { import = 'plugins' },
 }, {
   rocks = {
-    hererocks = false, -- use system luarocks from Homebrew
+    enabled = false, -- no plugin here needs luarocks; don't probe for it
   },
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
