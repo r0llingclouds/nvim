@@ -20,13 +20,21 @@ return {
       lint.linters_by_ft.swift = { 'swiftlint' }
     end
 
+    -- Filetypes that have a linter configured but should NOT lint automatically.
+    -- markdownlint is noisy for prose/notes, so it's off by default — run it on
+    -- demand with <leader>ul.
+    local no_autolint = {
+      markdown = true,
+    }
+
     -- Create autocommand which carries out the actual linting
     local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
     vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
       group = lint_augroup,
       callback = function()
-        -- Only run the linter in buffers that you can modify
-        if vim.bo.modifiable then
+        -- Only run the linter in buffers that you can modify, and skip
+        -- filetypes we've opted out of automatic linting.
+        if vim.bo.modifiable and not no_autolint[vim.bo.filetype] then
           lint.try_lint()
         end
       end,
