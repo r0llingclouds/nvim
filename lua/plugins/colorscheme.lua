@@ -1,5 +1,16 @@
 -- Colorschemes: all themes consolidated
 
+-- hardhat.nvim never sets vim.g.colors_name (its colors/*.vim just call
+-- require('hardhat').start(...), and the loader does a `highlight clear`).
+-- Things that read it — the transparency toggle in ui.lua, the Snacks
+-- colorscheme picker — would otherwise see nil. Set it ourselves.
+vim.api.nvim_create_autocmd('ColorScheme', {
+  pattern = 'hardhat*',
+  callback = function(ev)
+    vim.g.colors_name = ev.match
+  end,
+})
+
 return {
   -- Tokyonight
   {
@@ -59,4 +70,16 @@ return {
   { 'ellisonleao/gruvbox.nvim', lazy = true, config = true, opts = {} },
   { 'oskarnurm/koda.nvim', lazy = true },
   { 'maxmx03/solarized.nvim', lazy = true },
+  -- Hardhat: variants hardhat, hardhat-vivid, hardhat-diffused, hardhat-light, hardhat-m1
+  {
+    'g-kirti/hardhat.nvim',
+    lazy = true,
+    config = function()
+      require('hardhat').setup {
+        styles = {
+          italic_comments = false,
+        },
+      }
+    end,
+  },
 }
