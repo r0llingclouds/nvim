@@ -3,12 +3,13 @@ return {
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
   build = vim.fn.has 'win32' ~= 0 and 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' or 'make',
   -- Load on demand instead of every session (drops the eager startup cost).
-  cmd = { 'AvanteAsk', 'AvanteToggle', 'AvanteEdit', 'AvanteChat', 'AvanteRefresh' },
+  cmd = { 'AvanteAsk', 'AvanteToggle', 'AvanteEdit', 'AvanteChat', 'AvanteRefresh', 'AvanteSwitchProvider', 'AvanteModels' },
   keys = {
     { '<leader>aa', '<cmd>AvanteToggle<cr>', desc = 'Avante: toggle' },
     { '<leader>ak', '<cmd>AvanteAsk<cr>', mode = { 'n', 'v' }, desc = 'Avante: ask' },
     { '<leader>ae', '<cmd>AvanteEdit<cr>', mode = 'v', desc = 'Avante: edit' },
     { '<leader>ar', '<cmd>AvanteRefresh<cr>', desc = 'Avante: refresh' },
+    { '<leader>ap', '<cmd>AvanteSwitchProvider<cr>', desc = 'Avante: switch provider' },
   },
   version = false, -- Never set this value to "*"! Never!
   ---@module 'avante'
@@ -26,12 +27,41 @@ return {
           max_tokens = 20480,
         },
       },
+      -- Kimi K3 via the Kimi Code plan (sk-kimi- keys only work on this endpoint).
+      -- Key: MOONSHOT_API_KEY. K3 always thinks and fixes temperature/top_p, so don't send them.
       moonshot = {
-        endpoint = 'https://api.moonshot.ai/v1',
-        model = 'kimi-k2-0711-preview',
-        timeout = 30000, -- Timeout in milliseconds
+        endpoint = 'https://api.kimi.com/coding/v1',
+        model = 'k3',
+        timeout = 120000, -- thinking models take longer to first token
         extra_request_body = {
-          temperature = 0.75,
+          reasoning_effort = 'high', -- low | high | max
+          max_completion_tokens = 32768,
+        },
+      },
+      -- GLM 5.3 via the Z.ai GLM Coding Plan, OpenAI-compatible. Key: ZAI_API_KEY.
+      -- Thinking can't be disabled on 5.3; depth is set with reasoning_effort.
+      glm = {
+        __inherited_from = 'openai',
+        endpoint = 'https://api.z.ai/api/coding/paas/v4',
+        api_key_name = 'ZAI_API_KEY',
+        model = 'glm-5.3',
+        timeout = 120000,
+        extra_request_body = {
+          thinking = { type = 'enabled' },
+          reasoning_effort = 'high', -- low | high | max
+          max_tokens = 32768,
+        },
+      },
+      -- DeepSeek, OpenAI-compatible. Key: DEEPSEEK_API_KEY.
+      -- 'deepseek-flash' tracks the latest Flash (V4.1); 'deepseek-v4-pro' is the bigger one.
+      deepseek = {
+        __inherited_from = 'openai',
+        endpoint = 'https://api.deepseek.com',
+        api_key_name = 'DEEPSEEK_API_KEY',
+        model = 'deepseek-flash',
+        timeout = 120000,
+        extra_request_body = {
+          reasoning_effort = 'high', -- low | high | max
           max_tokens = 32768,
         },
       },
@@ -42,6 +72,8 @@ return {
   },
   dependencies = {
     'nvim-lua/plenary.nvim',
+    -- Required by avante's command parser (commands fail to register without it).
+    { 'ColinKennedy/mega.cmdparse', dependencies = { 'ColinKennedy/mega.logging' } },
     'MunifTanjim/nui.nvim',
     'nvim-telescope/telescope.nvim', -- file selector
     'folke/snacks.nvim', -- input provider
