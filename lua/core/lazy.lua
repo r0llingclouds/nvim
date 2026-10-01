@@ -18,6 +18,7 @@ rtp:prepend(lazypath)
 require('lazy').setup({
   { import = 'plugins' },
 }, {
+  concurrency = 4, -- limit simultaneous Git operations during plugin updates
   rocks = {
     enabled = false, -- no plugin here needs luarocks; don't probe for it
   },
