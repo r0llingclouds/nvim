@@ -60,7 +60,6 @@ return {
         { '<leader>n', group = '.[N]ET' },
         { '<leader>x', group = 'Diagnostics/Trouble' },
         { '<leader>q', group = 'Session/Quit' },
-        { '<leader>j', group = '[J]upyter' },
         { '<leader>a', group = '[A]vante AI' },
         { '<leader>c', group = '[C]ode' },
         { '<leader>g', group = '[G]it' },

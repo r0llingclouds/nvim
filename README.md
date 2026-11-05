@@ -19,7 +19,6 @@ Personal Neovim configuration for Python/ML, Unity C#, a TypeScript/Next.js blog
 Optional, per language:
 
 - Swift / iOS: Xcode selected with `xcode-select`, plus `brew install xcode-build-server swiftformat swiftlint`
-- Jupyter (molten): a Python with `pynvim` and `jupyter_client` set as `g:python3_host_prog`, `brew install imagemagick`, then `:UpdateRemotePlugins`
 
 AI providers read their keys from the environment: `ANTHROPIC_API_KEY`, `MOONSHOT_API_KEY` (Kimi), `ZAI_API_KEY` (GLM), `DEEPSEEK_API_KEY`.
 
@@ -74,7 +73,6 @@ nvim
 - Python: **venv-selector.nvim**, **nvim-dap-python**
 - Swift / iOS: sourcekit-lsp, **xcodebuild.nvim**
 - Web: **nvim-ts-autotag**, **nvim-ts-context-commentstring**, **package-info.nvim**, **nvim-highlight-colors**
-- Jupyter: **molten-nvim**, **image.nvim**, **jupytext.nvim**
 - **nvim-dap** + **nvim-dap-ui** + **mason-nvim-dap** (debugpy, netcoredbg, codelldb)
 - **neotest** with the Python and .NET adapters
 
@@ -236,9 +234,6 @@ In the sidebar: `a` / `A` apply change at cursor / all, `r` retry, `e` edit requ
 | `<leader>X` | Xcode actions picker |
 | `<leader>Xb` / `<leader>Xr` / `<leader>Xt` | Xcode build / build and run / test |
 | `<leader>Xd` / `<leader>Xl` | Select device / toggle logs |
-| `<leader>ji` | Start a Jupyter kernel (molten) |
-| `<leader>jl` / `<leader>je` / `<leader>jv` | Run line / operator / selection |
-| `<leader>jr` / `<leader>jo` / `<leader>jd` | Re-run cell / show output / delete cell |
 
 ### UI toggles
 | Key | Description |
@@ -275,7 +270,6 @@ In the sidebar: `a` / `A` apply change at cursor / all, `r` retry, `e` edit requ
 │   │   ├── lazydev.lua
 │   │   ├── lint.lua          # nvim-lint
 │   │   ├── lsp.lua           # servers, Mason, diagnostics
-│   │   ├── molten.lua        # Jupyter
 │   │   ├── motions.lua       # flash, trouble, persistence
 │   │   ├── neotest.lua
 │   │   ├── python.lua        # venv-selector
