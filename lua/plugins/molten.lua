@@ -37,6 +37,7 @@ return {
 
   {
     '3rd/image.nvim',
+    lazy = true, -- loaded by molten (python/markdown/quarto), not at startup
     opts = {
       backend = 'kitty',
       processor = 'magick_cli', -- uses the ImageMagick CLI; no luarocks needed

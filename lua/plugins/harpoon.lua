@@ -1,44 +1,36 @@
+-- Harpoon: quick file list. Loads on the first <leader>m keypress.
+
+-- Returns a function that calls harpoon:list():<method>(...).
+local function on_list(method, ...)
+  local args = { ... }
+  return function()
+    local list = require('harpoon'):list()
+    list[method](list, unpack(args))
+  end
+end
+
+local function toggle_menu()
+  local harpoon = require 'harpoon'
+  harpoon.ui:toggle_quick_menu(harpoon:list())
+end
+
 return {
   {
     'ThePrimeagen/harpoon',
     branch = 'harpoon2',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
-      local harpoon = require 'harpoon'
-
-      harpoon:setup()
-
-      vim.keymap.set('n', '<leader>ma', function()
-        harpoon:list():add()
-      end, { desc = 'Harpoon add file' })
-
-      vim.keymap.set('n', '<leader>mm', function()
-        harpoon.ui:toggle_quick_menu(harpoon:list())
-      end, { desc = 'Harpoon menu' })
-
-      vim.keymap.set('n', '<leader>m1', function()
-        harpoon:list():select(1)
-      end, { desc = 'Harpoon file 1' })
-
-      vim.keymap.set('n', '<leader>m2', function()
-        harpoon:list():select(2)
-      end, { desc = 'Harpoon file 2' })
-
-      vim.keymap.set('n', '<leader>m3', function()
-        harpoon:list():select(3)
-      end, { desc = 'Harpoon file 3' })
-
-      vim.keymap.set('n', '<leader>m4', function()
-        harpoon:list():select(4)
-      end, { desc = 'Harpoon file 4' })
-
-      vim.keymap.set('n', '<leader>mp', function()
-        harpoon:list():prev()
-      end, { desc = 'Harpoon previous' })
-
-      vim.keymap.set('n', '<leader>mn', function()
-        harpoon:list():next()
-      end, { desc = 'Harpoon next' })
+      require('harpoon'):setup()
     end,
+    keys = {
+      { '<leader>ma', on_list 'add', desc = 'Harpoon add file' },
+      { '<leader>mm', toggle_menu, desc = 'Harpoon menu' },
+      { '<leader>m1', on_list('select', 1), desc = 'Harpoon file 1' },
+      { '<leader>m2', on_list('select', 2), desc = 'Harpoon file 2' },
+      { '<leader>m3', on_list('select', 3), desc = 'Harpoon file 3' },
+      { '<leader>m4', on_list('select', 4), desc = 'Harpoon file 4' },
+      { '<leader>mp', on_list 'prev', desc = 'Harpoon previous' },
+      { '<leader>mn', on_list 'next', desc = 'Harpoon next' },
+    },
   },
 }

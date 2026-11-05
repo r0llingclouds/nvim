@@ -114,7 +114,7 @@ return {
   -- mini.* split from the monorepo so the statusline stays start-time while the
   -- editing modules defer to the first real buffer.
   {
-    'echasnovski/mini.statusline',
+    'nvim-mini/mini.statusline',
     lazy = false,
     config = function()
       local statusline = require 'mini.statusline'
@@ -126,12 +126,12 @@ return {
     end,
   },
   {
-    'echasnovski/mini.ai',
+    'nvim-mini/mini.ai',
     event = { 'BufReadPre', 'BufNewFile' },
     opts = { n_lines = 500 },
   },
   {
-    'echasnovski/mini.surround',
+    'nvim-mini/mini.surround',
     event = { 'BufReadPre', 'BufNewFile' },
     -- Remapped to the `gs` prefix so flash.nvim can own the bare `s` jump key.
     opts = {

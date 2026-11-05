@@ -9,7 +9,7 @@
 
 vim.lsp.config.sourcekit = {
   cmd = { 'xcrun', 'sourcekit-lsp' },
-  filetypes = { 'swift', 'objective-c', 'objective-cpp' },
+  filetypes = { 'swift', 'objc', 'objcpp' },
   -- buildServer.json (from xcode-build-server) is what makes xcodeproj/xcworkspace apps index.
   root_markers = { 'buildServer.json', 'Package.swift', '.git' },
 }

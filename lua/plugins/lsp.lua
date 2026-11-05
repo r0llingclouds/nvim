@@ -7,10 +7,13 @@
 
 return {
   'neovim/nvim-lspconfig',
+  -- Load with the first real buffer, not at startup (mason's registry is the slow part).
+  event = { 'BufReadPre', 'BufNewFile' },
   dependencies = {
     -- Mason must be loaded before its dependents.
     {
       'mason-org/mason.nvim',
+      cmd = { 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUpdate', 'MasonLog' },
       opts = {
         registries = {
           'github:mason-org/mason-registry',
@@ -52,26 +55,33 @@ return {
         -- Execute a code action
         map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
 
+        -- Telescope pickers, wrapped so telescope only loads when one is used.
+        local function tb(name)
+          return function()
+            require('telescope.builtin')[name]()
+          end
+        end
+
         -- Find references for the word under your cursor
-        map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+        map('grr', tb 'lsp_references', '[G]oto [R]eferences')
 
         -- Jump to the implementation of the word under your cursor
-        map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+        map('gri', tb 'lsp_implementations', '[G]oto [I]mplementation')
 
         -- Jump to the definition of the word under your cursor
-        map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+        map('grd', tb 'lsp_definitions', '[G]oto [D]efinition')
 
         -- Goto Declaration
         map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
         -- Fuzzy find all the symbols in your current document
-        map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
+        map('gO', tb 'lsp_document_symbols', 'Open Document Symbols')
 
         -- Fuzzy find all the symbols in your current workspace
-        map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
+        map('gW', tb 'lsp_dynamic_workspace_symbols', 'Open Workspace Symbols')
 
         -- Jump to the type of the word under your cursor
-        map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
+        map('grt', tb 'lsp_type_definitions', '[G]oto [T]ype Definition')
 
         ---@param method vim.lsp.protocol.Method
         local function supports(method)
@@ -133,15 +143,6 @@ return {
       virtual_text = {
         source = 'if_many',
         spacing = 2,
-        format = function(diagnostic)
-          local diagnostic_message = {
-            [vim.diagnostic.severity.ERROR] = diagnostic.message,
-            [vim.diagnostic.severity.WARN] = diagnostic.message,
-            [vim.diagnostic.severity.INFO] = diagnostic.message,
-            [vim.diagnostic.severity.HINT] = diagnostic.message,
-          }
-          return diagnostic_message[diagnostic.severity]
-        end,
       },
     }
 
@@ -235,6 +236,11 @@ return {
         'taplo', -- TOML formatter
       },
     }
+    -- Its install check hooks VimEnter, which has already fired when this loads
+    -- after startup (e.g. a file opened from the dashboard), so run it here.
+    if vim.v.vim_did_enter == 1 then
+      require('mason-tool-installer').run_on_start()
+    end
 
     -- ── Server install + auto-enable ───────────────────────────────────────────
     -- C# is handled by roslyn.nvim (see roslyn.lua), Swift by swift.lua — both

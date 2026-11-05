@@ -4,7 +4,7 @@
 return {
   -- Animate and highlight current scope
   {
-    'echasnovski/mini.indentscope',
+    'nvim-mini/mini.indentscope',
     version = false,
     event = { 'BufReadPre', 'BufNewFile' },
     opts = {

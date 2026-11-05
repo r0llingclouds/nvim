@@ -3,7 +3,8 @@
 
 return {
   'saghen/blink.cmp',
-  event = 'VimEnter',
+  -- lspconfig also lists blink as a dependency, so it loads before any server starts.
+  event = { 'InsertEnter', 'CmdlineEnter' },
   version = '1.*',
   dependencies = {
     -- Snippet Engine

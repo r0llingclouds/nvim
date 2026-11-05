@@ -69,7 +69,6 @@ return {
   { 'neanias/everforest-nvim', lazy = true },
   { 'ellisonleao/gruvbox.nvim', lazy = true, config = true, opts = {} },
   { 'oskarnurm/koda.nvim', lazy = true },
-  { 'maxmx03/solarized.nvim', lazy = true },
   -- Hardhat: variants hardhat, hardhat-vivid, hardhat-diffused, hardhat-light, hardhat-m1
   {
     'g-kirti/hardhat.nvim',

@@ -1,4 +1,5 @@
--- Motions & quality-of-life: flash jumps, trouble diagnostics, sessions, undo tree.
+-- Motions & quality-of-life: flash jumps, trouble diagnostics, sessions.
+-- (The undo tree is Neovim's built-in one — see <leader>U in core/keymaps.lua.)
 
 return {
   -- Flash: fast on-screen jumps. `s` to jump, `S` for treesitter nodes.
@@ -38,16 +39,6 @@ return {
       { '<leader>qs', function() require('persistence').load() end, desc = 'Restore Session' },
       { '<leader>ql', function() require('persistence').load { last = true } end, desc = 'Restore Last Session' },
       { '<leader>qd', function() require('persistence').stop() end, desc = "Don't Save Session" },
-    },
-  },
-
-  -- Undotree: visualize the undo history (undofile is already enabled).
-  {
-    'jiaoshijie/undotree',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = {},
-    keys = {
-      { '<leader>U', function() require('undotree').toggle() end, desc = 'Undotree' },
     },
   },
 }

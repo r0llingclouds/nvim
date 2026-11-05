@@ -1,6 +1,6 @@
 return {
-  'yetone/avante.nvim',
-  -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+  'avante-corp/avante.nvim',
+  -- `make` compiles the Rust libs from source on macOS, so updates need cargo (brew install rust).
   build = vim.fn.has 'win32' ~= 0 and 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' or 'make',
   -- Load on demand instead of every session (drops the eager startup cost).
   cmd = { 'AvanteAsk', 'AvanteToggle', 'AvanteEdit', 'AvanteChat', 'AvanteRefresh', 'AvanteSwitchProvider', 'AvanteModels' },
@@ -20,10 +20,11 @@ return {
     providers = {
       claude = {
         endpoint = 'https://api.anthropic.com',
-        model = 'claude-sonnet-4-5-20250929',
-        timeout = 30000, -- Timeout in milliseconds
+        model = 'claude-sonnet-5-5',
+        -- Thinking is always on, so first tokens take longer. No temperature:
+        -- Sonnet 5.5 rejects it (avante strips it for Claude 4+ anyway).
+        timeout = 120000,
         extra_request_body = {
-          temperature = 0.75,
           max_tokens = 20480,
         },
       },

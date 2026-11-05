@@ -4,17 +4,24 @@
   <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Neovim-mark.svg" alt="Neovim Logo" width="200"/>
 </div>
 
-Personal Neovim configuration with LSP support, AI code assistance, and modern UI enhancements.
+Personal Neovim configuration for Python/ML, Unity C#, a TypeScript/Next.js blog and Swift/iOS, with LSP, AI code assistance and a Snacks-based UI.
 
 ## Requirements
 
-- Neovim >= 0.11.0
-- Git
+- Neovim >= 0.12 (uses the built-in `vim.lsp.config` and undotree)
+- Git, `make`, ripgrep
 - A [Nerd Font](https://www.nerdfonts.com/) (configured by default)
-- `make` (for telescope-fzf-native)
-- ripgrep (for live grep)
-- Node.js (for some language servers)
-- lolcat (for dashboard gradient header)
+- Node.js / npm (language servers, prettierd, eslint_d)
+- tree-sitter CLI: `npm install -g tree-sitter-cli` (Homebrew's `tree-sitter` formula has no CLI). nvim-treesitter's `main` branch compiles every parser with it.
+- Rust / cargo: `brew install rust`. avante.nvim compiles its native libraries from source on every update.
+- lolcat (dashboard gradient header), lazygit (`<leader>gg`)
+
+Optional, per language:
+
+- Swift / iOS: Xcode selected with `xcode-select`, plus `brew install xcode-build-server swiftformat swiftlint`
+- Jupyter (molten): a Python with `pynvim` and `jupyter_client` set as `g:python3_host_prog`, `brew install imagemagick`, then `:UpdateRemotePlugins`
+
+AI providers read their keys from the environment: `ANTHROPIC_API_KEY`, `MOONSHOT_API_KEY` (Kimi), `ZAI_API_KEY` (GLM), `DEEPSEEK_API_KEY`.
 
 ## Installation
 
@@ -25,243 +32,261 @@ mv ~/.config/nvim ~/.config/nvim.bak
 # Clone this repository
 git clone https://github.com/r0llingclouds/nvim.git ~/.config/nvim
 
-# Start Neovim (plugins will auto-install)
+# Start Neovim (plugins install from the pinned lazy-lock.json)
 nvim
 ```
 
 ## Features
 
-### Plugin Management
-- **lazy.nvim** - Modern plugin manager with lazy loading
+### Plugins and LSP
+- **lazy.nvim** - plugin manager; `lazy-lock.json` is tracked so a fresh clone gets tested versions
+- **nvim-lspconfig** with the native `vim.lsp.config` / `vim.lsp.enable` API
+- **mason.nvim**, **mason-lspconfig**, **mason-tool-installer** - install servers, formatters and linters
+- **blink.cmp** + **LuaSnip** - completion and snippets
+- **lazydev.nvim**, **fidget.nvim**, **SchemaStore.nvim**
 
-### LSP & Completion
-- **nvim-lspconfig** - LSP configuration
-- **mason.nvim** - Automatic LSP/tool installation
-- **blink.cmp** - Fast autocompletion with fuzzy matching
-- **LuaSnip** - Snippet engine
-- **lazydev.nvim** - Lua LSP enhancements for Neovim config
-- **fidget.nvim** - LSP progress indicator
+### AI
+- **avante.nvim** - chat and inline edits. Providers: Claude Sonnet 5.5 (default), Kimi K3, GLM 5.3, DeepSeek
+- **blink-cmp-avante**, **img-clip.nvim** (paste images), **render-markdown.nvim**
 
-### AI Assistance
-- **avante.nvim** - AI-powered code assistant with chat interface (Cursor-like experience). Supports Claude and other LLM providers for code generation, editing, and explanation directly in the editor
+### Search and navigation
+- **telescope.nvim** (+ fzf-native, ui-select) - files, grep, help, LSP pickers
+- **snacks.nvim** picker - TODO searches, colorschemes, `gd` / `gr`
+- **flash.nvim** - `s` / `S` jumps
+- **harpoon** (harpoon2), **vim-tmux-navigator**, **trouble.nvim**, **persistence.nvim** (sessions)
 
-### Fuzzy Finding
-- **telescope.nvim** - Fuzzy finder for files, grep, LSP symbols
-- **telescope-fzf-native** - FZF algorithm for faster sorting
-- **snacks.picker** - Additional picker functionality
+### UI
+- **snacks.nvim** - dashboard, explorer, scroll, dim, bigfile, quickfile, bufdelete, lazygit, git browse
+- **bufferline.nvim**, **noice.nvim** + **nvim-notify**, **which-key.nvim** (helix preset), **mini.statusline**
+- **nvim-treesitter-context**, **indent-blankline.nvim** + **mini.indentscope**
+- Custom zen mode and transparency toggle (`lua/plugins/ui.lua`)
+- Colorschemes: dracula (default), tokyonight, catppuccin, kanagawa, zenbones, everforest, gruvbox, koda, monokai-pro, hardhat
 
-### UI & Navigation
-- **dracula.nvim** - Default color scheme (classic dark theme)
-- **tokyonight.nvim** - Popular night-inspired theme
-- **catppuccin** - Popular pastel theme
-- **kanagawa.nvim** - Wave-inspired theme
-- **zenbones.nvim** - Minimal bone-colored themes
-- **everforest-nvim** - Green-based comfortable theme
-- **koda.nvim** - Elegant dark theme
-- **bufferline.nvim** - Buffer tabs with LSP diagnostics
-- **snacks.nvim** - Dashboard, file explorer, picker, smooth scroll, zen mode
-- **noice.nvim** - Floating cmdline, search, and notifications
-- **which-key.nvim** - Keybinding hints (helix preset)
-- **mini.statusline** - Minimal statusline
-- **harpoon** - Quick file navigation list
-- **vim-tmux-navigator** - Seamless tmux/vim pane navigation
+### Editing
+- **nvim-treesitter** (`main` branch) + **textobjects**
+- **mini.ai**, **mini.surround** (on the `gs` prefix, so flash owns `s`), **nvim-autopairs**
+- **conform.nvim** (format on save), **nvim-lint**
+- **todo-comments.nvim**, **guess-indent.nvim**
+- Neovim's built-in undotree
 
-### Editor Enhancements
-- **treesitter** - Syntax highlighting and code understanding
-- **gitsigns.nvim** - Git signs in the gutter
-- **conform.nvim** - Code formatting (format on save)
-- **mini.ai** - Enhanced text objects
-- **mini.surround** - Surround operations
-- **mini.indentscope** - Animated scope highlighting
-- **indent-blankline.nvim** - Indent guides
-- **nvim-autopairs** - Auto-close brackets and quotes
-- **todo-comments.nvim** - Highlight TODO, FIXME, etc.
-- **guess-indent.nvim** - Auto-detect indentation
+### Languages, debugging and tests
+- C# / Unity: **roslyn.nvim**, **easy-dotnet.nvim**, **nvim-dap-unity**
+- Python: **venv-selector.nvim**, **nvim-dap-python**
+- Swift / iOS: sourcekit-lsp, **xcodebuild.nvim**
+- Web: **nvim-ts-autotag**, **nvim-ts-context-commentstring**, **package-info.nvim**, **nvim-highlight-colors**
+- Jupyter: **molten-nvim**, **image.nvim**, **jupytext.nvim**
+- **nvim-dap** + **nvim-dap-ui** + **mason-nvim-dap** (debugpy, netcoredbg, codelldb)
+- **neotest** with the Python and .NET adapters
 
 ## Language Support
 
-I normally use the following:
-
-| Language | LSP Server | Formatter/Linter |
-|----------|------------|------------------|
+| Language | LSP server | Formatter / linter |
+|----------|------------|--------------------|
 | Lua | lua_ls | stylua |
-| Swift | sourcekit-lsp* | - |
-| C# (Unity) | omnisharp | csharpier |
-| Python | basedpyright | ruff |
-| JavaScript/TypeScript | ts_ls | prettierd |
-| JSON | - | prettierd |
+| Python | basedpyright (types, hover) + ruff | ruff (fix, organize imports, format) |
+| C# (Unity) | roslyn | csharpier |
+| JavaScript / TypeScript | vtsls, tailwindcss, emmet | prettierd, eslint_d |
+| HTML / CSS | html, cssls | prettierd |
+| JSON / YAML | jsonls, yamlls (SchemaStore) | prettierd |
+| TOML | - | taplo |
+| Markdown | - | prettierd (manual `<leader>f` only), markdownlint (on demand, `<leader>ul`) |
+| Swift | sourcekit-lsp* | swiftformat*, swiftlint* |
 
-\* sourcekit-lsp is provided by Xcode toolchain, not Mason.
+\* From Xcode or Homebrew, not Mason.
 
-The following LSP servers and formatters are installed via Mason:
+Mason installs:
 
-**LSP Servers:**
-- `lua-language-server` (lua_ls)
-- `basedpyright`
-- `omnisharp`
-- `typescript-language-server` (ts_ls)
-
-**Formatters/Linters:**
-- `stylua` - Lua formatter
-- `csharpier` - C# formatter
-- `ruff` - Python linter/formatter
-- `prettierd` - JS/TS/JSON formatter
+- **LSP servers:** lua-language-server, basedpyright, ruff, vtsls, tailwindcss-language-server, css-lsp, html-lsp, emmet-language-server, json-lsp, yaml-language-server, plus `roslyn` from the extra Crashdummyy registry (`:MasonInstall roslyn`)
+- **Formatters / linters:** stylua, csharpier, prettierd, ruff, eslint_d, markdownlint, taplo
+- **Debug adapters:** debugpy, netcoredbg, codelldb
 
 ## Key Mappings
 
-Leader key: `<Space>`
+Leader key: `<Space>`. `<leader>?` shows the keymaps for the current buffer.
 
 ### General
 | Key | Description |
 |-----|-------------|
-| `<leader>?` | Show buffer keymaps |
-| `<leader>/` | Fuzzy search in current buffer |
-| `<leader>f` | Format buffer |
 | `<Esc>` | Clear search highlights |
+| `<leader>f` | Format buffer |
+| `<leader>uf` / `<leader>uF` | Toggle format on save (global / buffer) |
+| `<leader>r` | Substitute in file (type target and replacement) |
+| `<leader>R` | Substitute the word under the cursor, or the selection |
+| `<leader>U` | Undotree |
+| `s` / `S` | Flash jump / Flash treesitter selection |
+| `<Esc><Esc>` | Leave terminal mode |
 
-### File Navigation
+### Search
 | Key | Description |
 |-----|-------------|
 | `<leader><leader>` | Find files |
-| `<leader>sf` | Search files |
-| `<leader>sg` | Search by grep |
-| `<leader>sr` | Resume last search |
+| `<leader>sg` | Live grep |
+| `<leader>sw` | Grep word under cursor |
+| `<leader>s/` | Grep in open files |
+| `<leader>/` | Fuzzy search in current buffer |
 | `<leader>s.` | Recent files |
-| `<leader>sn` | Search Neovim config |
-| `<leader>e` | Toggle file explorer |
+| `<leader>sr` | Resume last search |
+| `<leader>sh` / `<leader>sk` | Help / keymaps |
+| `<leader>sd` | Diagnostics |
+| `<leader>ss` | Telescope pickers |
+| `<leader>st` / `<leader>sf` / `<leader>sn` | TODOs / FIX and BUG comments / NOTE comments |
+| `<leader>e` | File explorer |
 
-### Buffer Management
+### Buffers
 | Key | Description |
 |-----|-------------|
-| `<S-h>` | Previous buffer |
-| `<S-l>` | Next buffer |
-| `<leader>bd` | Delete buffer |
+| `<S-h>` / `<S-l>` | Previous / next buffer |
+| `<leader>bb` or ``<leader>` `` | Alternate buffer |
+| `<leader>bd` / `<leader>bD` | Delete buffer / delete buffer and window |
 | `<leader>bo` | Delete other buffers |
-| `<leader>bb` | Switch to alternate buffer |
-| `<leader>bp` | Pin buffer |
-| `<leader>bz` | Toggle Zen mode |
+| `<leader>bp` / `<leader>bP` | Pin buffer / close unpinned |
+| `<leader>bh` / `<leader>bl` | Close buffers to the left / right |
+| `<leader>bz` | Zen mode |
 
 ### Harpoon
 | Key | Description |
 |-----|-------------|
-| `<leader>ma` | Add file to Harpoon |
-| `<leader>mm` | Toggle Harpoon menu |
-| `<leader>m1` | Jump to Harpoon file 1 |
-| `<leader>m2` | Jump to Harpoon file 2 |
-| `<leader>m3` | Jump to Harpoon file 3 |
-| `<leader>m4` | Jump to Harpoon file 4 |
-| `<leader>mp` | Harpoon previous |
-| `<leader>mn` | Harpoon next |
+| `<leader>ma` | Add file |
+| `<leader>mm` | Menu |
+| `<leader>m1` … `<leader>m4` | Jump to file 1-4 |
+| `<leader>mp` / `<leader>mn` | Previous / next |
 
-### Window Management
+### Windows and sessions
 | Key | Description |
 |-----|-------------|
-| `<C-h/j/k/l>` | Navigate windows (tmux-aware) |
-| `<C-Up/Down>` | Resize height |
-| `<C-Left/Right>` | Resize width |
-| `<leader>w` | Window commands (hydra mode) |
+| `<C-h/j/k/l>` | Move between windows and tmux panes |
+| `<C-Up/Down/Left/Right>` | Resize |
+| `<leader>w` | Window commands (`<C-w>`) |
+| `<C-w><Space>` | Window hydra mode |
+| `<leader>qs` / `<leader>ql` | Restore session for this folder / last session |
+| `<leader>qd` | Don't save the current session |
 
-### LSP
+### LSP and code
 | Key | Description |
 |-----|-------------|
-| `gd` | Go to definition (Snacks picker) |
-| `gr` | Find references (Snacks picker) |
-| `grd` | Go to definition (Telescope) |
-| `grr` | Find references (Telescope) |
-| `gri` | Go to implementation |
-| `grn` | Rename symbol |
-| `gra` | Code action |
-| `grD` | Go to declaration |
-| `grt` | Go to type definition |
-| `gO` | Document symbols |
-| `gW` | Workspace symbols |
+| `gd` / `gr` | Definition / references (Snacks) |
+| `grd` / `grr` | Definition / references (Telescope) |
+| `gri` / `grt` | Implementation / type definition |
+| `grD` | Declaration |
+| `grn` / `gra` | Rename / code action |
+| `gO` / `gW` | Document / workspace symbols |
 | `<leader>th` | Toggle inlay hints |
+| `af` `if` / `ac` `ic` / `aa` `ia` | Function / class / parameter text objects |
+| `]f` / `[f` | Next / previous function |
+| `<leader>cp` | Swap parameter with the next one |
+| `gsa` `gsd` `gsr` | Add / delete / replace surrounding |
 
-### Completion (Insert Mode)
+### Diagnostics
 | Key | Description |
 |-----|-------------|
-| `<Enter>` | Accept completion |
-| `<C-j>` | Next suggestion |
-| `<C-k>` | Previous suggestion |
-| `<C-Space>` | Show documentation |
+| `<leader>xx` / `<leader>xX` | All / buffer diagnostics (Trouble) |
+| `<leader>xs` / `<leader>xl` | Symbols / location list (Trouble) |
+| `<leader>xq` | Diagnostics to location list |
+| `<leader>ul` | Lint the current buffer now |
 
-### Avante (AI Chat)
+### Completion (insert mode)
 | Key | Description |
 |-----|-------------|
-| `<leader>aa` | Open Avante sidebar |
-| `<leader>at` | Toggle sidebar |
-| `<leader>af` | Focus sidebar |
-| `<leader>ar` | Refresh sidebar |
-| `<leader>ae` | Edit selected code |
-| `<leader>a?` | Select AI model |
-| `<leader>an` | New conversation |
-| `<leader>ah` | Chat history |
-| `<leader>aS` | Stop AI response |
-| `<leader>ac` | Add current buffer to context |
-| `<leader>aB` | Add all buffers to context |
+| `<Enter>` | Accept |
+| `<C-j>` / `<C-k>` | Next / previous item |
+| `<C-Space>` | Show menu or documentation |
 
-**In Avante sidebar:**
+### Avante (AI)
 | Key | Description |
 |-----|-------------|
-| `a` | Apply change at cursor |
-| `A` | Apply all changes |
-| `r` | Retry request |
-| `e` | Edit request |
-| `@` | Add file to context |
-| `d` | Remove file from context |
-| `q` | Close sidebar |
-| `<Tab>` | Switch windows |
-| `]p` / `[p` | Next/prev prompt |
+| `<leader>aa` | Open Avante |
+| `<leader>ak` | Ask (normal or visual) |
+| `<leader>ae` | Edit the selection |
+| `<leader>ar` | Refresh |
+| `<leader>ap` | Switch provider |
+| `<leader>a?` / `<leader>ah` | Pick model / chat history (after Avante loads) |
+| `<leader>ac` / `<leader>aB` | Add current buffer / all buffers to context |
+| `<leader>aS` | Stop the response |
 
-**Diff conflicts:**
-| Key | Description |
-|-----|-------------|
-| `co` | Choose ours (current) |
-| `ct` | Choose theirs (incoming) |
-| `cb` | Choose both |
-| `]x` / `[x` | Next/prev conflict |
-
-### UI Toggles
-| Key | Description |
-|-----|-------------|
-| `<leader>uc` | Colorscheme picker |
-| `<leader>ud` | Toggle light/dark mode |
+In the sidebar: `a` / `A` apply change at cursor / all, `r` retry, `e` edit request, `@` / `d` add / remove file, `<Tab>` switch windows, `]p` / `[p` next / previous prompt, `q` close. In diffs: `co` ours, `ct` theirs, `cb` both, `]x` / `[x` next / previous conflict.
 
 ### Git
 | Key | Description |
 |-----|-------------|
-| `<leader>h` | Git hunk operations |
+| `]c` / `[c` | Next / previous hunk |
+| `<leader>hs` / `<leader>hr` | Stage / reset hunk (normal or visual) |
+| `<leader>hS` / `<leader>hR` | Stage / reset buffer |
+| `<leader>hu` | Undo stage hunk |
+| `<leader>hp` / `<leader>hb` | Preview hunk / blame line |
+| `<leader>hd` / `<leader>hD` | Diff against index / last commit |
+| `<leader>tb` / `<leader>tD` | Toggle line blame / deleted lines |
+| `<leader>gg` / `<leader>gb` | Lazygit / open in browser |
+
+### Tests and debugging
+| Key | Description |
+|-----|-------------|
+| `<leader>tt` / `<leader>tf` | Run nearest test / file |
+| `<leader>ts` / `<leader>to` | Test summary / output |
+| `<leader>td` | Debug nearest test |
+| `<F5>` | Start / continue debugging |
+| `<F1>` / `<F2>` / `<F3>` | Step into / over / out |
+| `<F7>` | Toggle debug UI |
+| `<leader>db` / `<leader>dB` | Toggle breakpoint / conditional breakpoint |
+
+### Languages
+| Key | Description |
+|-----|-------------|
+| `<leader>vs` | Select Python virtualenv |
+| `<leader>nb` / `<leader>nt` / `<leader>nr` | .NET build / test / run |
+| `<leader>X` | Xcode actions picker |
+| `<leader>Xb` / `<leader>Xr` / `<leader>Xt` | Xcode build / build and run / test |
+| `<leader>Xd` / `<leader>Xl` | Select device / toggle logs |
+| `<leader>ji` | Start a Jupyter kernel (molten) |
+| `<leader>jl` / `<leader>je` / `<leader>jv` | Run line / operator / selection |
+| `<leader>jr` / `<leader>jo` / `<leader>jd` | Re-run cell / show output / delete cell |
+
+### UI toggles
+| Key | Description |
+|-----|-------------|
+| `<leader>uc` | Colorscheme picker |
+| `<leader>ud` | Light / dark |
+| `<leader>ut` | Transparency |
+| `<leader>uw` | Line wrap |
+| `<leader>tm` | Render markdown in this buffer |
 
 ## Structure
 
 ```
 ~/.config/nvim/
-├── init.lua                    # Entry point (loads core modules)
+├── init.lua                  # Entry point (loads core modules)
 ├── lua/
-│   ├── core/                   # Core configuration
-│   │   ├── options.lua         # Vim options
-│   │   ├── keymaps.lua         # Non-plugin keybindings
-│   │   ├── autocmds.lua        # Autocommands
-│   │   └── lazy.lua            # Plugin manager setup
-│   ├── plugins/                # All plugin specs
-│   │   ├── avante.lua
+│   ├── core/
+│   │   ├── options.lua       # Vim options
+│   │   ├── keymaps.lua       # Non-plugin keymaps
+│   │   ├── autocmds.lua      # Autocommands
+│   │   ├── filetypes.lua     # Unity / shader filetype overrides
+│   │   └── lazy.lua          # Plugin manager setup
+│   ├── plugins/              # One file per area, auto-imported by lazy.nvim
+│   │   ├── avante.lua        # AI assistant
 │   │   ├── colorscheme.lua
-│   │   ├── completion.lua
-│   │   ├── debug.lua
-│   │   ├── editor.lua
+│   │   ├── completion.lua    # blink.cmp + LuaSnip
+│   │   ├── debug.lua         # nvim-dap
+│   │   ├── dotnet.lua        # easy-dotnet
+│   │   ├── editor.lua        # which-key, autopairs, mini.*, todo-comments
+│   │   ├── formatting.lua    # conform
+│   │   ├── git.lua           # gitsigns
 │   │   ├── harpoon.lua
-│   │   ├── formatting.lua
-│   │   ├── git.lua
 │   │   ├── indent.lua
 │   │   ├── lazydev.lua
-│   │   ├── lint.lua
-│   │   ├── lsp.lua
-│   │   ├── swift.lua
+│   │   ├── lint.lua          # nvim-lint
+│   │   ├── lsp.lua           # servers, Mason, diagnostics
+│   │   ├── molten.lua        # Jupyter
+│   │   ├── motions.lua       # flash, trouble, persistence
+│   │   ├── neotest.lua
+│   │   ├── python.lua        # venv-selector
+│   │   ├── roslyn.lua        # C# / Unity LSP
+│   │   ├── swift.lua         # sourcekit-lsp + xcodebuild
 │   │   ├── telescope.lua
 │   │   ├── tmux.lua
 │   │   ├── treesitter.lua
-│   │   └── ui.lua
-│   └── assets/                 # Dashboard assets
+│   │   ├── ui.lua            # snacks, bufferline, noice
+│   │   └── web.lua           # autotag, commentstring, package-info, colors
+│   └── assets/               # Dashboard header
 │       ├── header.txt
 │       └── header.cat
 └── lazy-lock.json
@@ -269,11 +294,11 @@ Leader key: `<Space>`
 
 ## Customization
 
-Add custom plugins by creating new files in `lua/plugins/`. Files are automatically loaded by lazy.nvim.
+Add plugins by creating new files in `lua/plugins/`; lazy.nvim imports every file there.
 
-To change the default colorscheme, edit `lua/plugins/colorscheme.lua` and modify the theme with `priority = 1000`:
+To change the default colorscheme, edit the theme with `priority = 1000` in `lua/plugins/colorscheme.lua`:
 ```lua
 vim.cmd.colorscheme 'dracula'
 ```
 
-Or use `<leader>uc` to pick a colorscheme interactively.
+Or pick one interactively with `<leader>uc`.
